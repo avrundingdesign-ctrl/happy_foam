@@ -128,8 +128,8 @@ Alle Inhalte liegen in einfachen Textdateien (JSON). Du brauchst nur einen Texte
 2. API-Key erstellen und in `.env.local` eintragen:
    ```
    RESEND_API_KEY=re_...
-   CONTACT_EMAIL=hallo@happyfoam.de
-   MAIL_FROM=HappyFoam <hallo@happyfoam.de>
+   CONTACT_EMAIL=hallo@happyfoam.org
+   MAIL_FROM=HappyFoam <hallo@happyfoam.org>
    ```
 
 Beide Formulare haben einen Spamschutz (verstecktes „Honeypot“-Feld) und eine Datenschutz-Checkbox.
@@ -148,7 +148,7 @@ Beide Formulare haben einen Spamschutz (verstecktes „Honeypot“-Feld) und ein
 
 Nach der Bestätigung landen Abonnent*innen auf `/newsletter/bestaetigt`. Ein anderer Anbieter lässt sich in `src/lib/newsletter.ts` austauschen.
 
-**Analytics (optional, cookielos):** Plausible-Konto anlegen, `NEXT_PUBLIC_PLAUSIBLE_DOMAIN=happyfoam.de` setzen **und** in `site.config.ts` `features.analytics: true`. In der Datenschutzerklärung erwähnen.
+**Analytics (optional, cookielos):** Plausible-Konto anlegen, `NEXT_PUBLIC_PLAUSIBLE_DOMAIN=happyfoam.org` setzen **und** in `site.config.ts` `features.analytics: true`. In der Datenschutzerklärung erwähnen.
 
 > Diese Dienste sind teilweise kostenpflichtig. Es ist nichts aktiviert, solange keine Schlüssel eingetragen sind.
 
@@ -156,11 +156,30 @@ Nach der Bestätigung landen Abonnent*innen auf `/newsletter/bestaetigt`. Ein an
 
 ## 5. Auf Vercel veröffentlichen & eigene Domain
 
+> **Wichtig:** Der kostenlose Vercel-Tarif „Hobby“ ist nur für **nicht-kommerzielle** Projekte erlaubt. Solange die Seite nur eine Vorschau ist, reicht Hobby. Sobald der Shop verkauft, braucht es den Tarif **Pro** (20 $ pro Monat).
+
+**Website veröffentlichen**
+
 1. Konto bei <https://vercel.com> anlegen (Anmeldung mit GitHub).
 2. **Add New → Project** → das Repository `happy_foam` auswählen → **Import**.
-3. Unter **Environment Variables** alle Werte aus deiner `.env.local` eintragen (mindestens `NEXT_PUBLIC_SITE_URL`, später Shopify/Resend/Brevo).
-4. **Deploy** klicken. Nach ca. 1–2 Minuten ist die Seite unter einer `…vercel.app`-Adresse online.
-5. **Eigene Domain:** Im Projekt → _Settings → Domains_ → `happyfoam.de` hinzufügen. Vercel zeigt an, welche DNS-Einträge (A-Record bzw. CNAME) beim Domain-Anbieter einzutragen sind. Nach der Umstellung `NEXT_PUBLIC_SITE_URL=https://happyfoam.de` setzen und neu deployen.
+3. Unter **Environment Variables** `NEXT_PUBLIC_SITE_URL=https://happyfoam.org` eintragen (später auch Shopify/Resend/Brevo).
+4. **Deploy** klicken. Nach 1–2 Minuten ist die Seite unter einer `…vercel.app`-Adresse online.
+
+**Domain `happyfoam.org` (bei IONOS) verbinden**
+
+1. In Vercel im Projekt → **Settings → Domains → Add Domain** → `happyfoam.org` eingeben. Vercel fragt, ob `www.happyfoam.org` dazukommen soll → **ja**, mit Weiterleitung auf `happyfoam.org`.
+2. Vercel zeigt jetzt zwei DNS-Einträge an – **genau diese Werte** verwenden:
+   | Typ   | Hostname | Wert                                          |
+   | ----- | -------- | --------------------------------------------- |
+   | A     | `@`      | IP-Adresse aus Vercel (meist `76.76.21.21`)   |
+   | CNAME | `www`    | Ziel aus Vercel (z. B. `…vercel-dns-017.com`) |
+3. Bei IONOS: **Domains & SSL → happyfoam.org → Reiter „DNS“**.
+   - Den vorhandenen **A-Eintrag** für `@` bearbeiten und die Vercel-IP eintragen.
+   - Den **AAAA-Eintrag** für `@` **löschen** (sonst landen manche Besucher weiter auf der IONOS-Parkseite).
+   - Vorhandene Einträge für `www` löschen und den **CNAME** `www` → Vercel-Ziel anlegen.
+   - **MX-** und **TXT-Einträge nicht anfassen** – die braucht später das E-Mail-Postfach.
+4. Warten: meist 5–30 Minuten, selten bis 24 Stunden. In Vercel steht dann bei beiden Domains „Valid Configuration“.
+5. Das **SSL-Zertifikat** stellt Vercel automatisch und kostenlos aus. Das SSL-Angebot von IONOS wird **nicht** gebraucht.
 
 Jeder `git push` auf `main` veröffentlicht die Seite automatisch neu.
 
@@ -204,7 +223,6 @@ Das gesetzliche Muster-Widerrufsformular ist bereits enthalten – bitte mit der
 | `[VERSANDKOSTEN_DE]`, `[VERSANDKOSTENFREI_AB]`                             | Versandkosten                               | `src/app/versand-und-zahlung/page.tsx`                                                           |
 | `[KOSTEN_PRO_NUTZUNG]`                                                     | B2B-Kosten pro Toilettengang                | `content/de/business.json`                                                                       |
 | `[KONTAKT_EMAIL]`                                                          | Öffentliche Kontaktadresse                  | `site.config.ts` + `CONTACT_EMAIL` in `.env.local`                                               |
-| `[DOMAIN]`                                                                 | Endgültige Domain (z. B. happyfoam.de)      | `site.config.ts` + `NEXT_PUBLIC_SITE_URL`                                                        |
 | `[SOCIAL_LINKS]`                                                           | Instagram, TikTok, LinkedIn …               | `site.config.ts` (`social`)                                                                      |
 | `[GRUENDERSTORY]`                                                          | Text „Über uns“                             | `content/de/about.json`                                                                          |
 | `[GRUENDERFOTO]`                                                           | Foto für „Über uns“                         | `src/app/ueber-uns/page.tsx`                                                                     |

@@ -8,9 +8,8 @@ export const siteConfig = {
   claim: "Dein Geschäft bleibt dein Geschäft.",
   description:
     "HappyFoam ist ein Brausepulver im Sachet: ins Klo streuen, Schaum drauf – Plätschern, Plopp und Spritzer bleiben unter uns.",
-  /** Endgültige Domain – Platzhalter [DOMAIN]. Wird von NEXT_PUBLIC_SITE_URL überschrieben. */
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://happyfoam.de",
-  domainPlaceholder: "[DOMAIN]",
+  /** Domain der Website. Wird von NEXT_PUBLIC_SITE_URL überschrieben (z. B. für Vorschau-Deployments). */
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://happyfoam.org",
   locale: "de-DE",
   city: "Hamburg",
 
