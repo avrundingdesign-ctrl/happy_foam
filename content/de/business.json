@@ -1,0 +1,55 @@
+{
+  "hero": {
+    "eyebrow": "HappyFoam für Unternehmen",
+    "title": "Das stillste Extra für Ihre Gäste-WCs.",
+    "subtitle": "HappyFoam sorgt für entspannte Toilettengänge in Büro, Hotel und Gastronomie – diskret, günstig, sofort einsatzbereit.",
+    "cta": "Angebot anfragen"
+  },
+  "benefits": [
+    {
+      "title": "Wohlbefinden im Team",
+      "text": "Wer sich auf der Büro-Toilette entspannt, kommt entspannter zurück an den Schreibtisch. Ein kleines Zeichen, dass Sie mitdenken."
+    },
+    {
+      "title": "Gästeerlebnis",
+      "text": "Ihre Gäste werden darüber nicht reden – aber sie werden sich erinnern. Im besten Sinne."
+    },
+    {
+      "title": "Kleine Kosten pro Nutzung",
+      "text": "Rund [KOSTEN_PRO_NUTZUNG] pro Toilettengang. Weniger als ein Kaffee – deutlich leiser."
+    }
+  ],
+  "products": [
+    {
+      "handle": "business-karton",
+      "title": "Business-Karton",
+      "text": "200 Sachets und ein Wandspender, der in jedem WC eine gute Figur macht. Nachfüllen ohne Aufwand.",
+      "points": ["200 Sachets", "Wandspender inklusive", "Preis: [PREIS_B2B] netto"]
+    },
+    {
+      "handle": "logo-edition",
+      "title": "Logo-Edition",
+      "text": "Sachets mit Ihrem Logo – das wohl leiseste Werbegeschenk der Welt. Für Messen, Events, Hotels und Teams.",
+      "points": ["Ab 1.000 Sachets", "Ihr Logo auf dem Sachet", "Preis auf Anfrage"]
+    }
+  ],
+  "tiers": {
+    "title": "Mengenstaffel",
+    "note": "Alle Preise netto zzgl. gesetzlicher MwSt. und Versand. Staffelpreise sind Platzhalter und werden noch festgelegt.",
+    "rows": [
+      { "qty": "1–4 Kartons", "price": "[PREIS_STAFFEL_1]" },
+      { "qty": "5–19 Kartons", "price": "[PREIS_STAFFEL_2]" },
+      { "qty": "ab 20 Kartons", "price": "[PREIS_STAFFEL_3]" },
+      { "qty": "Logo-Edition ab 1.000 Sachets", "price": "auf Anfrage" }
+    ]
+  },
+  "industries": [
+    "Büro / Agentur",
+    "Coworking-Space",
+    "Hotel",
+    "Restaurant / Café",
+    "Bar / Club",
+    "Event / Messe",
+    "Sonstiges"
+  ]
+}

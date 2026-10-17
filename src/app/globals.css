@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   HappyFoam Design-Tokens
+   ------------------------------------------------------------------ */
+:root {
+  --color-ink: #0f1b2d;
+  --color-foam: #f7f9fc;
+  --color-bubble: #ffffff;
+  --color-mint: #3ddcb4;
+  --color-blush: #ff8fb1;
+  --color-sky: #bfe6ff;
+  --color-sun: #ffd84d;
+  --color-muted: #5b6b80;
+  /* Barrierearme Textvarianten (WCAG AA auf Weiß/Schaumweiß) */
+  --color-mint-ink: #0a7a60;
+  --color-blush-ink: #c2255c;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-foam: var(--color-foam);
+  --color-bubble: var(--color-bubble);
+  --color-mint: var(--color-mint);
+  --color-blush: var(--color-blush);
+  --color-sky: var(--color-sky);
+  --color-sun: var(--color-sun);
+  --color-muted: var(--color-muted);
+  --color-mint-ink: var(--color-mint-ink);
+  --color-blush-ink: var(--color-blush-ink);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-inter), ui-sans-serif, sans-serif;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--color-foam);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-mint);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-hf {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-hf {
+      padding-inline: 1.5rem;
+    }
+  }
+  .section-y {
+    padding-block: 4.5rem;
+  }
+  @media (min-width: 768px) {
+    .section-y {
+      padding-block: 7rem;
+    }
+  }
+  .eyebrow {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-mint-ink);
+  }
+  /* Glänzende Schaumblase als Hintergrund-Deko */
+  .bubble-deco {
+    border-radius: 9999px;
+    background:
+      radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0 14%, transparent 15%),
+      radial-gradient(
+        circle at 50% 50%,
+        rgba(255, 255, 255, 0.75),
+        rgba(191, 230, 255, 0.55) 70%,
+        rgba(191, 230, 255, 0.85)
+      );
+    box-shadow:
+      inset -6px -8px 16px rgba(15, 27, 45, 0.06),
+      0 8px 24px rgba(15, 27, 45, 0.05);
+  }
+  .prose-hf {
+    color: var(--color-ink);
+    line-height: 1.7;
+  }
+  .prose-hf h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-hf h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-hf p,
+  .prose-hf ul,
+  .prose-hf ol {
+    margin-bottom: 1rem;
+  }
+  .prose-hf ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-hf a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-mint-ink);
+  }
+}
+
+@layer utilities {
+  .text-shadow-pop {
+    text-shadow: 3px 3px 0 var(--color-ink);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+@keyframes blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* Fokus-Ring auf dunklen Flächen */
+.on-dark :focus-visible {
+  outline-color: var(--color-sun);
+}

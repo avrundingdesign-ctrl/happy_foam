@@ -1,0 +1,42 @@
+{
+  "hero": {
+    "eyebrow": "So funktioniert's",
+    "title": "Physik, aber gemütlich.",
+    "subtitle": "Warum eine Schicht Schaum aus dem lautesten Ort im Büro den leisesten macht."
+  },
+  "explain": [
+    {
+      "title": "Glatte Wasserfläche = laut.",
+      "text": "Trifft etwas auf eine glatte Wasseroberfläche, schwingt sie – und die Keramik drumherum macht daraus einen Lautsprecher. Plätscher, Plopp, Spritzer."
+    },
+    {
+      "title": "Schaumteppich = leise.",
+      "text": "Eine dicke Schaumschicht fängt den Aufprall ab, bevor er das Wasser erreicht. Die vielen Bläschen schlucken Schall und halten Spritzer zurück."
+    },
+    {
+      "title": "Spülen = weg.",
+      "text": "Beim Spülen verschwindet der Schaum. Nichts bleibt zurück, außer guter Laune."
+    }
+  ],
+  "facts": [
+    {
+      "label": "Lautstärke ohne Schaum",
+      "value": "[MESSWERT_OHNE_DB]"
+    },
+    {
+      "label": "Lautstärke mit Schaum",
+      "value": "[MESSWERT_MIT_DB]"
+    },
+    {
+      "label": "Schaum hält etwa",
+      "value": "[SCHAUMDAUER_MIN] Minuten"
+    }
+  ],
+  "history": {
+    "eyebrow": "Schon 1964 erfunden",
+    "title": "Endlich in deiner Hosentasche.",
+    "text": "Die Idee, Toilettengeräusche mit Schaum zu dämpfen, ist nicht neu: 1964 wurde in den USA ein Patent dafür angemeldet (US 3,383,710, erteilt 1968). Das Patent ist längst abgelaufen – wir haben die Idee ins 21. Jahrhundert geholt: flach, handlich, hübsch verpackt.",
+    "linkLabel": "US-Patent 3,383,710 bei Google Patents",
+    "href": "https://patents.google.com/patent/US3383710"
+  }
+}

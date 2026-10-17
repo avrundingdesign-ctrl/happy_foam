@@ -1,0 +1,144 @@
+{
+  "hero": {
+    "eyebrow": "Psst. Niemand muss es hören.",
+    "title": "Dein Geschäft bleibt dein Geschäft.",
+    "subtitle": "Ein Sachet ins Klo, Schaum drauf – Plätschern und Plopp bleiben unter uns.",
+    "ctaPrimary": "Jetzt leise werden",
+    "ctaSecondary": "Für Unternehmen",
+    "loud": "PLÄTSCHER!",
+    "quiet": "psst."
+  },
+  "claims": [
+    "Dein Geschäft bleibt dein Geschäft.",
+    "Psst. Niemand muss es hören.",
+    "Leise ist das neue Laut.",
+    "Kein Plopp. Kein Drama.",
+    "Schaum drüber.",
+    "Das stillste Örtchen der Stadt.",
+    "Made with Schaum in Hamburg.",
+    "Schaum drauf, Stress weg.",
+    "Happy Foam, happy you."
+  ],
+  "scenes": {
+    "eyebrow": "Kennst du das?",
+    "title": "Die Wände sind dünner, als man denkt.",
+    "items": [
+      {
+        "id": "office",
+        "title": "Großraumbüro.",
+        "text": "Totenstille. Und dann: PLÄTSCHER."
+      },
+      {
+        "id": "date",
+        "title": "Das erste Mal bei ihr. Oder ihm.",
+        "text": "Die Wände sind dünn. Sehr dünn."
+      },
+      {
+        "id": "train",
+        "title": "Zugklo, Gang voller Leute.",
+        "text": "Du weißt Bescheid."
+      }
+    ]
+  },
+  "stats": {
+    "eyebrow": "Kein Einzelfall",
+    "title": "Du bist nicht allein. Nur leiser.",
+    "items": [
+      {
+        "value": "36 %",
+        "text": "der Gen Z fühlen sich beim großen Geschäft im Büro unwohl.",
+        "source": "Britische Studie von QS Supplies, zitiert von smartup-news.de (Dez. 2024)",
+        "href": "https://smartup-news.de/gesundheit/toilettengang-waehrend-der-arbeitszeit-ein-unterschaetztes-tabu/"
+      },
+      {
+        "value": "48 % vs. 19 %",
+        "text": "48 % der Frauen, aber nur 19 % der Männer fühlen sich dabei unwohl.",
+        "source": "Britische Studie von QS Supplies, zitiert von smartup-news.de (Dez. 2024)",
+        "href": "https://smartup-news.de/gesundheit/toilettengang-waehrend-der-arbeitszeit-ein-unterschaetztes-tabu/"
+      },
+      {
+        "value": "≈ 500.000",
+        "text": "Geräusch-Überdecker hatte Toto in Japan zwischen 1988 und 2004 verkauft.",
+        "source": "IOL, „Sound Princess eliminates toilet noises“ (2004)",
+        "href": "https://www.iol.co.za/news/eish/sound-princess-eliminates-toilet-noises-223254"
+      }
+    ]
+  },
+  "steps": {
+    "eyebrow": "So funktioniert's",
+    "title": "Drei Schritte zur Stille.",
+    "items": [
+      {
+        "title": "Aufreißen.",
+        "text": "Passt in jede Hosentasche."
+      },
+      {
+        "title": "Reinstreuen.",
+        "text": "Es sprudelt, es schäumt."
+      },
+      {
+        "title": "5 Sekunden warten, loslegen.",
+        "text": "Kein Plopp. Kein Drama."
+      }
+    ],
+    "outro": "Und tschüss: Beim Spülen ist der Schaum weg."
+  },
+  "meter": {
+    "eyebrow": "Hör mal",
+    "title": "Leise ist das neue Laut.",
+    "text": "Vorher Großraumbüro-Alarm, nachher Bibliothek. Die genauen Messwerte reichen wir nach, sobald das Labor fertig ist.",
+    "loudLabel": "Großraumbüro-Alarm",
+    "quietLabel": "Bibliothek",
+    "valueWithout": "[MESSWERT_OHNE_DB]",
+    "valueWith": "[MESSWERT_MIT_DB]"
+  },
+  "sound": {
+    "title": "Hör selbst.",
+    "text": "Ton kommt nur, wenn du klickst. Versprochen.",
+    "without": {
+      "label": "Ohne",
+      "caption": "Ohne HappyFoam: deutlich hörbares Plätschern und ein „Plopp“ auf glatter Wasserfläche."
+    },
+    "with": {
+      "label": "Mit HappyFoam",
+      "caption": "Mit HappyFoam: gedämpftes, kaum hörbares Rauschen – der Schaum schluckt Aufprall und Spritzer."
+    },
+    "note": "Hinweis: Die Hörproben sind Platzhalter, bis echte Aufnahmen vorliegen."
+  },
+  "science": {
+    "eyebrow": "Warum Schaum leiser macht",
+    "title": "Glattes Wasser ist eine Trommel. Schaum ist ein Kissen.",
+    "points": [
+      {
+        "title": "Aufprall abfangen",
+        "text": "Der Schaumteppich bremst, bevor es auf die Wasserfläche trifft."
+      },
+      {
+        "title": "Schall schlucken",
+        "text": "Tausende kleine Bläschen dämpfen, was trotzdem klingt."
+      },
+      {
+        "title": "Spritzer stoppen",
+        "text": "Kein Rückspritzer, kein nasses Erlebnis."
+      }
+    ],
+    "cta": "Genauer erklärt"
+  },
+  "business": {
+    "eyebrow": "Für Unternehmen",
+    "title": "Das stillste Extra für Ihre Gäste-WCs.",
+    "text": "Business-Karton mit Wandspender oder Sachets mit Ihrem Logo – für Büro, Hotel und Gastronomie.",
+    "cta": "Angebot anfragen"
+  },
+  "ingredients": {
+    "eyebrow": "Was drin ist",
+    "title": "Kurze Zutatenliste, große Wirkung.",
+    "text": "Geplant sind Natron, Zitronensäure und ein biologisch abbaubarer Schaumbildner. Die finale Rezeptur veröffentlichen wir hier, sobald sie feststeht.",
+    "items": ["Natron", "Zitronensäure", "Biologisch abbaubarer Schaumbildner"],
+    "final": "[INHALTSSTOFFE_FINAL]"
+  },
+  "newsletter": {
+    "title": "Werde leise informiert.",
+    "text": "Kein Spam, versprochen – wir sind ja diskret."
+  }
+}

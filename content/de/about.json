@@ -1,0 +1,22 @@
+{
+  "hero": {
+    "eyebrow": "Über uns",
+    "title": "Made with Schaum in Hamburg.",
+    "subtitle": "HappyFoam ist ein kleines Hamburger Start-up mit einer großen Mission: Ruhe auf dem stillen Örtchen."
+  },
+  "story": "[GRUENDERSTORY]",
+  "values": [
+    {
+      "title": "Leicht statt peinlich",
+      "text": "Wir machen ein Tabuthema leicht – mit Augenzwinkern, nie auf Kosten anderer."
+    },
+    {
+      "title": "Ehrlich statt übertrieben",
+      "text": "Wir versprechen nur, was wir messen können. Zahlen kommen, wenn sie belegt sind."
+    },
+    {
+      "title": "Klein und nah",
+      "text": "Gegründet nebenberuflich in Hamburg. Wenn du schreibst, antwortet ein Mensch."
+    }
+  ]
+}

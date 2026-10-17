@@ -1,0 +1,51 @@
+{
+  "_hinweis": "FAQ-Inhalte. 'featured: true' = erscheint auf der Startseite (max. 5). Platzhalter in eckigen Klammern werden auf der Website gelb markiert.",
+  "items": [
+    {
+      "q": "Wie funktioniert HappyFoam?",
+      "a": "Das Pulver sprudelt im Wasser auf und bildet eine dicke Schaumschicht. Die fängt den Aufprall ab und dämpft Geräusche.",
+      "featured": true
+    },
+    {
+      "q": "Wie lange hält der Schaum?",
+      "a": "Etwa [SCHAUMDAUER_MIN] Minuten – genug Zeit für alles Wichtige.",
+      "featured": true
+    },
+    {
+      "q": "Ist das gut für Rohre und Klärgruben?",
+      "a": "[ROHR_KLAERGRUBE_TEXT]",
+      "featured": true
+    },
+    {
+      "q": "Was ist drin?",
+      "a": "[INHALTSSTOFFE_FINAL]",
+      "featured": true
+    },
+    {
+      "q": "Funktioniert es auch im Urinal?",
+      "a": "[URINAL_TEXT]"
+    },
+    {
+      "q": "Riecht das?",
+      "a": "[DUFT_TEXT]"
+    },
+    {
+      "q": "Darf ich die Sachets im Flugzeug mitnehmen?",
+      "a": "In der Regel ja. Bitte prüf vor dem Flug trotzdem die Regeln deiner Airline und des Abflughafens – die entscheiden am Ende."
+    },
+    {
+      "q": "Ist die Verpackung diskret?",
+      "a": "Ja. Außen steht nicht groß drauf, was drin ist. Auch der Versand kommt neutral.",
+      "featured": true
+    },
+    {
+      "q": "Gibt es das für Firmen?",
+      "a": "Ja, als Business-Karton mit Wandspender und als Logo-Edition mit Ihrem Firmenlogo.",
+      "link": { "href": "/fuer-unternehmen", "label": "Zu den Angeboten für Unternehmen" }
+    },
+    {
+      "q": "Ist das für Kinder geeignet?",
+      "a": "Bitte außerhalb der Reichweite von Kindern aufbewahren."
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+PLATZHALTER: ohne.mp3 und mit.mp3 sind synthetisch erzeugte Beispiel-Sounds.
+Bitte durch echte Aufnahmen ersetzen (gleiche Dateinamen, MP3, ca. 2–4 Sekunden).
