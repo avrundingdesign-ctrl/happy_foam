@@ -1,4 +1,3 @@
-import { cacheLife } from "next/cache";
 import data from "@data/products.json";
 import {
   isShopifyConfigured,
@@ -41,9 +40,6 @@ function fromLocal(p: LocalProduct): Product {
  * bleiben in data/products.json. Ohne Zugangsdaten: reine Mock-Daten.
  */
 export async function getProducts(): Promise<Product[]> {
-  "use cache";
-  cacheLife("hours");
-
   const local = data.products.map(fromLocal);
   if (!isShopifyConfigured) return local;
 

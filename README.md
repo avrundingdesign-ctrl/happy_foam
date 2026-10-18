@@ -4,7 +4,7 @@
 
 Die Website für HappyFoam: Startseite mit animierter Produktvorstellung, Shop mit Warenkorb (Shopify), Seite für Unternehmen mit Anfrageformular, „So funktioniert's“, FAQ, Über uns, Kontakt, Presse und alle Rechtsseiten.
 
-Technik: Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Motion (Framer Motion) · Shopify Storefront API · Resend · Brevo · Playwright.
+Technik: Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Motion (Framer Motion) · Cloudflare Workers (OpenNext) · Shopify Storefront API · Resend · Brevo · Playwright.
 
 ![Startseite – Desktop](docs/screenshots/start-desktop.png)
 
@@ -16,7 +16,7 @@ Technik: Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Motion (Fram
 2. [Shopify verbinden](#2-shopify-verbinden)
 3. [Texte und Produkte ändern](#3-texte-und-produkte-ändern)
 4. [Formulare & Newsletter einrichten](#4-formulare--newsletter-einrichten)
-5. [Auf Vercel veröffentlichen & eigene Domain](#5-auf-vercel-veröffentlichen--eigene-domain)
+5. [Veröffentlichen auf Cloudflare & Domain happyfoam.org](#5-veröffentlichen-auf-cloudflare--domain-happyfoamorg)
 6. [Rechtstexte einfügen](#6-rechtstexte-einfügen)
 7. [Offene Platzhalter](#7-offene-platzhalter)
 8. [Fehlende Dateien & Assets](#8-fehlende-dateien--assets)
@@ -150,38 +150,46 @@ Nach der Bestätigung landen Abonnent*innen auf `/newsletter/bestaetigt`. Ein an
 
 **Analytics (optional, cookielos):** Plausible-Konto anlegen, `NEXT_PUBLIC_PLAUSIBLE_DOMAIN=happyfoam.org` setzen **und** in `site.config.ts` `features.analytics: true`. In der Datenschutzerklärung erwähnen.
 
-> Diese Dienste sind teilweise kostenpflichtig. Es ist nichts aktiviert, solange keine Schlüssel eingetragen sind.
+> Diese Dienste sind teilweise kostenpflichtig. Es ist nichts aktiviert, solange keine Schlüssel eingetragen sind. Auf Cloudflare werden die Schlüssel als „Secrets“ hinterlegt (siehe Abschnitt 5).
 
 ---
 
-## 5. Auf Vercel veröffentlichen & eigene Domain
+## 5. Veröffentlichen auf Cloudflare & Domain happyfoam.org
 
-> **Wichtig:** Der kostenlose Vercel-Tarif „Hobby“ ist nur für **nicht-kommerzielle** Projekte erlaubt. Solange die Seite nur eine Vorschau ist, reicht Hobby. Sobald der Shop verkauft, braucht es den Tarif **Pro** (20 $ pro Monat).
+Die Website läuft auf **Cloudflare Workers** (über den Adapter [OpenNext](https://opennext.js.org/cloudflare)). Die Domain `happyfoam.org` ist bei IONOS registriert, nutzt aber die **Nameserver von Cloudflare**. Alle DNS-Einträge werden deshalb im Cloudflare-Dashboard gepflegt. E-Mail bleibt bei IONOS: Die **MX**- und **TXT**-Einträge in Cloudflare nie löschen.
 
-**Website veröffentlichen**
+**Lokal so testen, wie es auf Cloudflare läuft**
 
-1. Konto bei <https://vercel.com> anlegen (Anmeldung mit GitHub).
-2. **Add New → Project** → das Repository `happy_foam` auswählen → **Import**.
-3. Unter **Environment Variables** `NEXT_PUBLIC_SITE_URL=https://happyfoam.org` eintragen (später auch Shopify/Resend/Brevo).
-4. **Deploy** klicken. Nach 1–2 Minuten ist die Seite unter einer `…vercel.app`-Adresse online.
+```bash
+npm run preview      # baut die Seite und startet sie unter http://localhost:8787
+```
 
-**Domain `happyfoam.org` (bei IONOS) verbinden**
+**Veröffentlichen**
 
-1. In Vercel im Projekt → **Settings → Domains → Add Domain** → `happyfoam.org` eingeben. Vercel fragt, ob `www.happyfoam.org` dazukommen soll → **ja**, mit Weiterleitung auf `happyfoam.org`.
-2. Vercel zeigt jetzt zwei DNS-Einträge an – **genau diese Werte** verwenden:
-   | Typ   | Hostname | Wert                                          |
-   | ----- | -------- | --------------------------------------------- |
-   | A     | `@`      | IP-Adresse aus Vercel (meist `76.76.21.21`)   |
-   | CNAME | `www`    | Ziel aus Vercel (z. B. `…vercel-dns-017.com`) |
-3. Bei IONOS: **Domains & SSL → happyfoam.org → Reiter „DNS“**.
-   - Den vorhandenen **A-Eintrag** für `@` bearbeiten und die Vercel-IP eintragen.
-   - Den **AAAA-Eintrag** für `@` **löschen** (sonst landen manche Besucher weiter auf der IONOS-Parkseite).
-   - Vorhandene Einträge für `www` löschen und den **CNAME** `www` → Vercel-Ziel anlegen.
-   - **MX-** und **TXT-Einträge nicht anfassen** – die braucht später das E-Mail-Postfach.
-4. Warten: meist 5–30 Minuten, selten bis 24 Stunden. In Vercel steht dann bei beiden Domains „Valid Configuration“.
-5. Das **SSL-Zertifikat** stellt Vercel automatisch und kostenlos aus. Das SSL-Angebot von IONOS wird **nicht** gebraucht.
+```bash
+npx wrangler login   # einmalig: im Browser mit dem Cloudflare-Konto bestätigen
+npm run deploy       # baut die Seite und lädt sie zu Cloudflare hoch
+```
 
-Jeder `git push` auf `main` veröffentlicht die Seite automatisch neu.
+**Domain verbinden (einmalig)**
+
+1. Cloudflare-Dashboard → **DNS → Records**: die alten **A**- und **AAAA**-Einträge für `happyfoam.org` (IONOS-Parkseite) und einen eventuellen Eintrag für `www` löschen.
+2. **Workers & Pages → happyfoam-website → Settings → Domains & Routes → Add → Custom domain** → `happyfoam.org` eintragen. Danach dasselbe für `www.happyfoam.org`.
+3. Cloudflare legt die passenden DNS-Einträge und das SSL-Zertifikat automatisch an. Nach wenigen Minuten läuft die Seite unter https://happyfoam.org.
+
+**Automatisch bei jedem `git push` veröffentlichen (optional)**
+Im Worker → **Settings → Builds** das GitHub-Repository verbinden:
+
+- Build-Befehl: `npx opennextjs-cloudflare build`
+- Deploy-Befehl: `npx opennextjs-cloudflare deploy`
+
+**Geheime Schlüssel (Resend, Brevo, Shopify …)**
+Im Worker → **Settings → Variables and Secrets** eintragen, oder per `npx wrangler secret put RESEND_API_KEY`. Für den lokalen Test kommen sie in die Datei `.dev.vars` (gleiche Namen wie in `.env.example`).
+
+**Kosten**
+Der kostenlose Workers-Tarif erlaubt 100.000 Aufrufe pro Tag und 10 ms Rechenzeit pro Aufruf. Die Seiten werden vorab erzeugt und kommen in wenigen Millisekunden aus dem Zwischenspeicher. Falls Formulare oder die Kasse an die Grenze stoßen (Fehler 1102 in den Cloudflare-Logs), auf **Workers Paid** wechseln.
+
+**Technischer Hinweis:** Die Next.js-16-Funktion „Cache Components“ ist abgeschaltet, weil der Cloudflare-Adapter sie noch nicht stabil unterstützt (Stand Oktober 2026). Produktdaten werden beim Veröffentlichen geladen. Nach einer Preisänderung die Seite also neu veröffentlichen (`npm run deploy` oder `git push`).
 
 ---
 
@@ -198,6 +206,8 @@ Die Rechtstexte werden **nicht** selbst geschrieben, sondern von einem Rechtstex
 | Versand & Zahlung                             | `src/app/versand-und-zahlung/page.tsx` | `[VERSAND_ZAHLUNG]` |
 
 Das gesetzliche Muster-Widerrufsformular ist bereits enthalten – bitte mit der Fassung des Anbieters abgleichen.
+
+**Für die Datenschutzerklärung wichtig:** Die Website wird über Cloudflare ausgeliefert (Hosting/CDN). Das muss der Rechtstexte-Anbieter berücksichtigen.
 
 **Bereits technisch berücksichtigt:** Schriften werden lokal ausgeliefert (kein Google-Fonts-Server), keine externen Einbettungen, keine Cookies im Standardbetrieb (der Warenkorb liegt im Browser-Speicher), Cookie-Banner vorbereitet und per Schalter aktivierbar, Newsletter nur mit Double-Opt-in, Datenschutz-Hinweis an allen Formularen, Preisangaben mit MwSt.-/Kleinunternehmer-Hinweis, Grundpreis, Versandkosten-Link und GPSR-Angaben (Hersteller, Sicherheitshinweise, Typbezeichnung, Charge) auf jeder Produktseite.
 

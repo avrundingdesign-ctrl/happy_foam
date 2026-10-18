@@ -31,10 +31,7 @@ export async function generateMetadata({
   });
 }
 
-// Alle Produktseiten werden vorab gerendert (generateStaticParams) und komplett ausgeliefert –
-// kein Ladezustand, kein Layout-Sprung.
-export const instant = false;
-
+// Alle Produktseiten werden beim Build vorab gerendert (generateStaticParams).
 export default async function ProductPage({ params }: PageProps<"/produkte/[slug]">) {
   const { slug } = await params;
   const product = await getProduct(slug);

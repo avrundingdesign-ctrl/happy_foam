@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { BRICOLAGE_800_WOFF_BASE64 } from "./og-font";
 
 export const ogSize = { width: 1200, height: 630 };
 export const ogContentType = "image/png";
@@ -13,9 +12,7 @@ export async function renderOg({
   title: string;
   eyebrow?: string;
 }) {
-  const font = await readFile(
-    join(process.cwd(), "assets/fonts/BricolageGrotesque-ExtraBold.woff"),
-  );
+  const font = Buffer.from(BRICOLAGE_800_WOFF_BASE64, "base64");
   const bubbles = [
     { x: 940, y: 60, r: 140 },
     { x: 1080, y: 330, r: 70 },
