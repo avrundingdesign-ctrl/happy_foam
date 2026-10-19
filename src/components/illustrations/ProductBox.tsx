@@ -7,7 +7,7 @@ export type BoxView = "front" | "open" | "sachets";
 
 /**
  * Platzhalter-Rendering der Verpackung. Wird ersetzt, sobald echte
- * Produktfotos/Renderings in Shopify hinterlegt sind.
+ * Produktfotos in data/products.json hinterlegt sind.
  */
 export function ProductBox({
   color = "mint",

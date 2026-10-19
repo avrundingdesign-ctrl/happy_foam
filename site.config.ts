@@ -48,7 +48,24 @@ export const siteConfig = {
     cookieBanner: false,
   },
 
-  /** Zahlungsarten-Icons im Footer (sollten zu den in Shopify aktivierten Zahlungsarten passen) */
+  shop: {
+    currency: "EUR",
+    /**
+     * Versand – PLATZHALTER-WERTE ([VERSANDKOSTEN_DE], [VERSANDKOSTENFREI_AB]), bitte festlegen.
+     * Weitere Länder einfach ergänzen, z. B. { code: "AT", name: "Österreich", cost: 9.9 }.
+     */
+    shipping: {
+      countries: [{ code: "DE", name: "Deutschland", cost: 3.95 }],
+      /** Ab diesem Warenwert (Euro) ist der Versand kostenlos. null = nie kostenlos */
+      freeFrom: 30 as number | null,
+    },
+    /** Präfix der Bestellnummern, z. B. HF-261019-7KQ2 */
+    orderPrefix: "HF",
+    /** Höchstmenge pro Produkt und Bestellung */
+    maxQuantity: 99,
+  },
+
+  /** Zahlungsarten im Footer – sollten zu den im Stripe-Dashboard aktivierten passen */
   paymentMethods: ["PayPal", "Visa", "Mastercard", "Apple Pay", "Google Pay", "Klarna"],
 } as const;
 

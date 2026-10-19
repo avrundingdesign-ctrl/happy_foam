@@ -44,7 +44,7 @@ export function AddToCart({
         handle: product.handle,
         title: product.title,
         price: product.price!,
-        variantId: product.variantId,
+
         color: product.color,
       },
       qty,

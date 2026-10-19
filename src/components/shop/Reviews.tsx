@@ -11,7 +11,7 @@ export type Review = {
 
 /**
  * Bewertungen – vorbereitet, aber bewusst leer.
- * Nur echte, überprüfbare Kundenbewertungen einbinden (z. B. aus einer Shopify-Review-App).
+ * Nur echte, überprüfbare Kundenbewertungen einbinden (z. B. aus einem Bewertungsdienst).
  */
 export function Reviews({ reviews = [] }: { reviews?: Review[] }) {
   return (

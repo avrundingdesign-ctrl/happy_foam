@@ -9,5 +9,5 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <LegalPage title="Datenschutzerklärung" placeholder="[DATENSCHUTZ]" />;
+  return <LegalPage title="Datenschutzerklärung" doc="datenschutz" />;
 }

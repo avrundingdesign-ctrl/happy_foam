@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 
 const bg = { mint: "bg-mint/25", blush: "bg-blush/25", sky: "bg-sky/60", sun: "bg-sun/35" };
 
-/** Zeigt das Shopify-Produktbild oder – solange keins da ist – das gezeichnete Platzhalter-Rendering. */
+/** Zeigt das Produktbild aus data/products.json oder – solange keins da ist – das gezeichnete Platzhalter-Rendering. */
 export function ProductVisual({
   product,
   view = "front",

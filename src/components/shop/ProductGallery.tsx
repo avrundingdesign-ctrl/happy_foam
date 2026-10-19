@@ -13,7 +13,7 @@ const PLACEHOLDER_VIEWS: { view: BoxView; label: string }[] = [
   { view: "sachets", label: "Einzel-Sachets" },
 ];
 
-/** Produktgalerie: Shopify-Bilder oder gezeichnete Platzhalter-Ansichten. */
+/** Produktgalerie: echte Produktbilder oder gezeichnete Platzhalter-Ansichten. */
 export function ProductGallery({ product }: { product: Product }) {
   const slides = product.images.length
     ? product.images.map((img, i) => ({

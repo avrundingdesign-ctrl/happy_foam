@@ -9,5 +9,5 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <LegalPage title="Impressum" placeholder="[IMPRESSUM]" />;
+  return <LegalPage title="Impressum" doc="impressum" />;
 }

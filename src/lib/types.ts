@@ -21,10 +21,8 @@ export type Product = {
   typeDesignation: string;
   batch: string;
   highlights: string[];
-  /** Shopify-Varianten-ID (gid://shopify/ProductVariant/…). null im Mock-Modus */
-  variantId: string | null;
   availableForSale: boolean;
-  /** Bild-URLs aus Shopify. Leer = gezeichnete Platzhalter-Renderings */
+  /** Produktbilder aus /public. Leer = gezeichnete Platzhalter-Renderings */
   images: { url: string; alt: string; width?: number; height?: number }[];
   /** Gefahrenkennzeichnung nach CLP – standardmäßig leer */
   clp?: {
@@ -40,6 +38,5 @@ export type CartLine = {
   title: string;
   price: number;
   quantity: number;
-  variantId: string | null;
   color: ProductColor;
 };

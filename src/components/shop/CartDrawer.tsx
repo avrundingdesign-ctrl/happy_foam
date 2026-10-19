@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCart } from "./CartProvider";
 import { formatPrice, taxNote } from "@/lib/price";
-import { createCheckout } from "@/app/actions/checkout";
+import { FreeShippingProgress } from "@/components/checkout/FreeShippingProgress";
 import { Button } from "@/components/ui/Button";
 import { Sachet } from "@/components/illustrations/Sachet";
 import { Mascot } from "@/components/brand/Mascot";
@@ -14,8 +14,6 @@ import { Mascot } from "@/components/brand/Mascot";
 export function CartDrawer() {
   const { lines, subtotal, isOpen, close, setQuantity, remove } = useCart();
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -30,20 +28,6 @@ export function CartDrawer() {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  const checkout = () => {
-    setMessage(null);
-    startTransition(async () => {
-      const res = await createCheckout(
-        lines.map((l) => ({ handle: l.handle, quantity: l.quantity })),
-      );
-      if (res.ok) {
-        window.location.href = res.url;
-      } else {
-        setMessage(res.message);
-      }
-    });
-  };
 
   return (
     <dialog
@@ -175,15 +159,11 @@ export function CartDrawer() {
               >
                 Versandkosten
               </Link>
-              . Bezahlung und Rechnung im nächsten Schritt.
+              .
             </p>
-            {message && (
-              <p className="mt-3 rounded-2xl bg-sun/40 px-4 py-3 text-sm" role="status">
-                {message}
-              </p>
-            )}
-            <Button className="mt-4 w-full" size="lg" onClick={checkout} disabled={pending}>
-              {pending ? "Einen Moment …" : "Zur Kasse"}
+            <FreeShippingProgress subtotalCents={Math.round(subtotal * 100)} className="mt-4" />
+            <Button href="/kasse" onClick={close} className="mt-4 w-full" size="lg">
+              Zur Kasse
             </Button>
             <p className="mt-3 text-center text-xs text-muted">Diskret verpackt. Versprochen.</p>
           </div>

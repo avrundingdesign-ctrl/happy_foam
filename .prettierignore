@@ -5,3 +5,4 @@ docs/screenshots
 src/lib/og-font.ts
 .open-next
 .wrangler
+src/generated

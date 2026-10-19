@@ -34,6 +34,8 @@ type CartContextValue = {
   iconRef: RefObject<HTMLButtonElement | null>;
   /** Zählt hoch, wenn das Warenkorb-Symbol hüpfen soll */
   bump: number;
+  /** true, sobald der Warenkorb aus dem Browser-Speicher geladen ist */
+  ready: boolean;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -131,8 +133,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       close: () => setOpen(false),
       iconRef,
       bump,
+      ready: hydrated,
     }),
-    [lines, add, setQuantity, remove, clear, isOpen, bump],
+    [lines, add, setQuantity, remove, clear, isOpen, bump, hydrated],
   );
 
   return (

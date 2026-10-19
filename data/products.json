@@ -1,5 +1,5 @@
 {
-  "_hinweis": "Mock-Daten. Werden genutzt, solange keine Shopify-Zugangsdaten gesetzt sind. Preise sind Planwerte – siehe Platzhalter [PREIS_POCKET], [PREIS_VORRAT], [PREIS_B2B]. Felder wie netWeightGrams, Typbezeichnung und GPSR-Angaben werden auch im Shopify-Modus aus dieser Datei ergänzt (Zuordnung über 'handle').",
+  "_hinweis": "Produktkatalog des Shops. Preise sind Endpreise in Euro (beim Business-Karton netto). Planwerte sind mit Platzhaltern wie [PREIS_POCKET] markiert – nach Festlegung den Preis anpassen und 'pricePlaceholder' löschen. 'available': false blendet den Kauf-Button aus ('Bald wieder da'). 'images': Liste von Bildern unter /public/produkte/, z. B. {\"src\": \"/produkte/pocket-box-1.jpg\", \"alt\": \"Pocket-Box von vorne\"}. Leer = gezeichnete Platzhalter.",
   "products": [
     {
       "handle": "pocket-box",
@@ -16,7 +16,8 @@
       "typeDesignation": "HappyFoam Pocket-Box, 10 × Sachet [TYPBEZEICHNUNG]",
       "batch": "[CHARGE]",
       "highlights": ["10 Einzel-Sachets", "Flach & handlich", "Neutral verpackt"],
-      "shopifyVariantId": null
+      "available": true,
+      "images": []
     },
     {
       "handle": "vorratspack",
@@ -33,7 +34,8 @@
       "typeDesignation": "HappyFoam Vorratspack, 30 × Sachet [TYPBEZEICHNUNG]",
       "batch": "[CHARGE]",
       "highlights": ["30 Einzel-Sachets", "Seltener nachkaufen", "Neutral verpackt"],
-      "shopifyVariantId": null
+      "available": true,
+      "images": []
     },
     {
       "handle": "business-karton",
@@ -51,7 +53,8 @@
       "typeDesignation": "HappyFoam Business-Karton, 200 × Sachet + Wandspender [TYPBEZEICHNUNG]",
       "batch": "[CHARGE]",
       "highlights": ["200 Sachets", "Inklusive Wandspender", "Auf Anfrage mit Mengenstaffel"],
-      "shopifyVariantId": null
+      "available": true,
+      "images": []
     },
     {
       "handle": "logo-edition",
@@ -68,7 +71,8 @@
       "typeDesignation": "HappyFoam Logo-Edition [TYPBEZEICHNUNG]",
       "batch": "[CHARGE]",
       "highlights": ["Ab 1.000 Sachets", "Ihr Logo auf dem Sachet", "Preis auf Anfrage"],
-      "shopifyVariantId": null
+      "available": true,
+      "images": []
     }
   ]
 }

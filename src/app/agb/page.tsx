@@ -9,5 +9,5 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <LegalPage title="Allgemeine Geschäftsbedingungen" placeholder="[AGB]" />;
+  return <LegalPage title="Allgemeine Geschäftsbedingungen" doc="agb" />;
 }

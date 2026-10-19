@@ -23,11 +23,9 @@ test.describe("Smoke-Tests", () => {
     await expect(drawer).toBeVisible();
     await expect(drawer.getByRole("link", { name: "Pocket-Box" })).toBeVisible();
     await expect(drawer).toContainText("13,98 €");
-    // Ohne Shopify-Zugangsdaten: Demo-Hinweis statt Weiterleitung
-    if (!process.env.SHOPIFY_STORE_DOMAIN) {
-      await drawer.getByRole("button", { name: "Zur Kasse" }).click();
-      await expect(drawer.getByRole("status")).toContainText("Demo-Modus");
-    }
+    await drawer.getByRole("link", { name: "Zur Kasse" }).click();
+    await expect(page).toHaveURL(/\/kasse$/);
+    await expect(page.getByRole("heading", { name: "Deine Bestellung" })).toBeVisible();
   });
 
   test("Kontaktformular validiert Eingaben", async ({ page }) => {

@@ -1,3 +1,5 @@
+import "server-only";
+
 /**
  * Newsletter-Anmeldung mit Double-Opt-in über Brevo (austauschbar).
  * Benötigt NEWSLETTER_API_KEY, BREVO_LIST_ID und BREVO_DOI_TEMPLATE_ID.

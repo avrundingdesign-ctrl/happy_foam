@@ -9,10 +9,6 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  images: {
-    // Produktbilder aus Shopify
-    remotePatterns: [{ protocol: "https", hostname: "cdn.shopify.com" }],
-  },
   poweredByHeader: false,
   devIndicators: false,
   // www.happyfoam.org → happyfoam.org

@@ -2,9 +2,9 @@
 
 > **Dein Geschäft bleibt dein Geschäft.**
 
-Die Website für HappyFoam: Startseite mit animierter Produktvorstellung, Shop mit Warenkorb (Shopify), Seite für Unternehmen mit Anfrageformular, „So funktioniert's“, FAQ, Über uns, Kontakt, Presse und alle Rechtsseiten.
+Die Website für HappyFoam: Startseite mit animierter Produktvorstellung, eigener Shop mit Warenkorb und Kasse (Bezahlung über Stripe: Karte, PayPal, Apple Pay, Google Pay, Klarna, SEPA), Seite für Unternehmen mit Anfrageformular, „So funktioniert's“, FAQ, Über uns, Kontakt, Presse und alle Rechtsseiten.
 
-Technik: Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Motion (Framer Motion) · Cloudflare Workers (OpenNext) · Shopify Storefront API · Resend · Brevo · Playwright.
+Technik: Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Motion (Framer Motion) · Cloudflare Workers (OpenNext) · Stripe · Resend · Brevo · Playwright.
 
 ![Startseite – Desktop](docs/screenshots/start-desktop.png)
 
@@ -13,7 +13,7 @@ Technik: Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Motion (Fram
 ## Inhalt
 
 1. [Projekt lokal starten](#1-projekt-lokal-starten)
-2. [Shopify verbinden](#2-shopify-verbinden)
+2. [Shop & Bezahlung mit Stripe](#2-shop--bezahlung-mit-stripe)
 3. [Texte und Produkte ändern](#3-texte-und-produkte-ändern)
 4. [Formulare & Newsletter einrichten](#4-formulare--newsletter-einrichten)
 5. [Veröffentlichen auf Cloudflare & Domain happyfoam.org](#5-veröffentlichen-auf-cloudflare--domain-happyfoamorg)
@@ -52,41 +52,55 @@ npm run dev
 
 Dann im Browser <http://localhost:3000> öffnen. Änderungen an Texten oder Code erscheinen sofort.
 
-> **Demo-Modus:** Solange in `.env.local` nichts eingetragen ist, zeigt der Shop Beispielprodukte aus `data/products.json`, Formulare werden nicht wirklich verschickt (die Nachricht erscheint nur im Terminal) und „Zur Kasse“ zeigt einen Hinweis statt des Shopify-Checkouts.
+> **Demo-Modus:** Solange in `.env.local` nichts eingetragen ist, werden Formulare nicht wirklich verschickt (die Nachricht erscheint nur im Terminal) und die Kasse prüft zwar alle Eingaben, zeigt am Ende aber einen Demo-Hinweis statt der Zahlung.
 
 ---
 
-## 2. Shopify verbinden
+## 2. Shop & Bezahlung mit Stripe
 
-Zahlung, Rechnungen, Steuern und Bestellabwicklung laufen über Shopify. Die Website zeigt die Produkte an und schickt den Warenkorb an den Shopify-Checkout.
+Der Shop ist komplett in die Website eingebaut – **ohne monatliche Shop-Gebühren**. Bezahlt wird über [Stripe](https://stripe.com/de). Stripe berechnet nur eine Gebühr pro Zahlung (siehe Stripe-Preisseite).
 
-1. **Shopify-Shop anlegen** (falls noch nicht vorhanden) auf <https://www.shopify.com/de>.
-2. **Headless-Kanal installieren:** Im Shopify-Admin → _Vertriebskanäle_ → _+_ → im App Store nach **„Headless“** suchen → installieren.
-3. **Storefront anlegen:** _Headless_ öffnen → _Storefront hinzufügen_.
-4. **Token kopieren:** In der Storefront unter _Storefront API_ den **öffentlichen Zugriffstoken** („Public access token“) kopieren.
-5. **Produkte anlegen** – wichtig ist der **Handle** (steht unter _Produkt → Suchmaschinen-Eintrag → URL_). Er muss genau so heißen wie in `data/products.json`:
-   | Produkt                               | Handle            |
-   | ------------------------------------- | ----------------- |
-   | Pocket-Box                            | `pocket-box`      |
-   | Vorratspack                           | `vorratspack`     |
-   | Business-Karton (später im Warenkorb) | `business-karton` |
-   | Logo-Edition                          | `logo-edition`    |
-6. Produkte im Headless-Kanal **verfügbar machen** (Produkt → _Vertriebskanäle_ → Headless anhaken).
-7. In `.env.local` eintragen:
+**So läuft eine Bestellung ab**
+
+1. Kund*in legt Produkte in den Warenkorb → **Zur Kasse** (`/kasse`).
+2. Kontaktdaten und Lieferadresse (optional abweichende Rechnungsadresse) eingeben, Zahlungsart wählen (Karte, PayPal, Apple Pay, Google Pay, Klarna, SEPA – je nach Freischaltung in Stripe).
+3. Bestellübersicht mit Versandkosten, Gesamtsumme, MwSt.-Hinweis und Links zu AGB/Widerruf/Datenschutz → Button **„Zahlungspflichtig bestellen“**.
+4. Die Zahlung läuft über Stripe (bei PayPal & Co. kurz extern), danach landet man auf `/bestellung/abgeschlossen`.
+5. Stripe meldet die erfolgreiche Zahlung an die Website (Webhook). Die Website schickt eine **Bestellbestätigung** (inkl. AGB und Widerrufsbelehrung) an die Kundin bzw. den Kunden und eine **Benachrichtigung mit Lieferadresse** an `CONTACT_EMAIL` – also an dich.
+
+Preise und Versandkosten berechnet **nur der Server** aus `data/products.json` und `site.config.ts` – Manipulationen im Browser haben keine Wirkung.
+
+**Wo sehe ich Bestellungen?** Im Stripe-Dashboard unter **Zahlungen** (mit Bestellnummer, Artikeln, Lieferadresse) und in der Benachrichtigungs-E-Mail.
+
+### Stripe einrichten
+
+1. Kostenloses Konto auf <https://dashboard.stripe.com/register> anlegen. Für echte Zahlungen fragt Stripe Firmendaten, Ausweis und Bankverbindung (IBAN) ab – testen geht sofort.
+2. **API-Schlüssel:** Stripe-Dashboard → _Entwickler → API-Schlüssel_. Für Tests die Schlüssel mit `pk_test_…` / `sk_test_…` nehmen, für echte Verkäufe `pk_live_…` / `sk_live_…`.
+3. **Zahlungsarten freischalten:** _Einstellungen → Zahlungsmethoden_. Karten, Apple Pay, Google Pay sind meist schon aktiv. Klarna und SEPA-Lastschrift einschalten. **PayPal:** dort „PayPal“ aktivieren und dein (kostenloses) PayPal-Geschäftskonto verbinden.
+4. **Apple Pay:** _Einstellungen → Zahlungsmethoden-Domains_ → `happyfoam.org` hinzufügen.
+5. **Webhook anlegen:** _Entwickler → Webhooks → Endpunkt hinzufügen_
+   - URL: `https://happyfoam.org/api/stripe/webhook`
+   - Ereignis: `payment_intent.succeeded`
+   - Danach das **Signing Secret** (`whsec_…`) kopieren.
+6. **Schlüssel bei Cloudflare hinterlegen** (einmalig, im Projektordner):
+   ```bash
+   npx wrangler secret put STRIPE_SECRET_KEY        # sk_…
+   npx wrangler secret put STRIPE_PUBLISHABLE_KEY   # pk_…
+   npx wrangler secret put STRIPE_WEBHOOK_SECRET    # whsec_…
    ```
-   SHOPIFY_STORE_DOMAIN=dein-shop.myshopify.com
-   SHOPIFY_STOREFRONT_ACCESS_TOKEN=der-kopierte-token
-   ```
-8. Server neu starten (`Strg + C`, dann `npm run dev`).
+   Die Kasse liest die Schlüssel zur Laufzeit – ein neues Veröffentlichen ist dafür nicht nötig.
+7. **Lokal testen:** dieselben drei Werte (Testschlüssel) in `.env.local` eintragen und `npm run dev` neu starten. Testkarte: `4242 4242 4242 4242`, beliebiges Ablaufdatum in der Zukunft, beliebige Prüfziffer. Im Testmodus zeigt die Kasse oben einen gelben Hinweis.
+8. **Live gehen:** Konto bei Stripe vollständig verifizieren, die `…_live_…`-Schlüssel und einen Live-Webhook eintragen (Schritte 5 und 6 im Live-Modus wiederholen).
 
-**Was kommt woher?**
+**Bestellbestätigung per E-Mail:** braucht Resend (siehe Abschnitt 4) – sonst werden die E-Mails nur ins Log geschrieben. Zusätzlich kann Stripe eigene Zahlungsbelege schicken: _Einstellungen → Kunden-E-Mails → Erfolgreiche Zahlungen_.
 
-- Aus **Shopify**: Preis, Verfügbarkeit, Produktbilder, Titel, Beschreibung, Varianten-ID für den Warenkorb.
-- Aus **`data/products.json`**: Füllmenge (für den Grundpreis), Typbezeichnung, Charge, Highlights, Farbe, Kaufweg (Warenkorb oder Anfrage). Diese Angaben bleiben auch mit Shopify gültig.
+**E-Mail-Vorlage ansehen:** `npm run dev` starten und <http://localhost:3000/api/dev/email-vorschau> öffnen (Text-Fassung: `?typ=text`, Benachrichtigung an dich: `?typ=intern`). Die Vorlage liegt in `src/lib/emails/order-emails.ts`.
 
-**Checkout prüfen (Pflicht in Deutschland):** Der Bestellbutton im Checkout muss **„Zahlungspflichtig bestellen“** heißen. In Shopify unter _Einstellungen → Sprachen_ bzw. im Checkout-Editor prüfen und den Text ggf. anpassen.
+**Versandkosten:** in `site.config.ts` unter `shop.shipping` (Kosten je Land, Grenze für kostenlosen Versand). **Die eingetragenen Werte (3,95 € / frei ab 30 €) sind Platzhalter – bitte festlegen.**
 
 **Business-Karton später in den Warenkorb:** In `data/products.json` beim Business-Karton `"purchase": "inquiry"` auf `"purchase": "cart"` ändern.
+
+> **Rechtlich prüfen lassen:** Ablauf und Texte der Kasse sind nach gängiger Praxis gestaltet (Bestellübersicht, Button „Zahlungspflichtig bestellen“, Bestätigung mit AGB und Widerrufsbelehrung). Lass den Bestellprozess trotzdem von deinem Rechtstexte-Anbieter prüfen – viele bieten das als Shop-Check an.
 
 ---
 
@@ -102,7 +116,9 @@ Alle Inhalte liegen in einfachen Textdateien (JSON). Du brauchst nur einen Texte
 | Für Unternehmen (Vorteile, Mengenstaffel, Branchen im Formular)                                                          | `content/de/business.json` |
 | So funktioniert's                                                                                                        | `content/de/how.json`      |
 | Über uns                                                                                                                 | `content/de/about.json`    |
-| Produkte (Mock-Daten + Pflichtangaben)                                                                                   | `data/products.json`       |
+| Produkte: Preise, Verfügbarkeit (`available`), Bilder (`images`), Pflichtangaben                                         | `data/products.json`       |
+| Versandkosten, Bestellnummern-Präfix                                                                                     | `site.config.ts` → `shop`  |
+| Rechtstexte (Seiten + Bestell-E-Mail)                                                                                    | `content/de/rechtliches/`  |
 
 **Platzhalter** wie `[SCHAUMDAUER_MIN]` werden auf der Website automatisch **gelb markiert**, damit nichts vergessen wird. Einfach durch den echten Text ersetzen – die Markierung verschwindet dann von selbst.
 
@@ -122,15 +138,16 @@ Alle Inhalte liegen in einfachen Textdateien (JSON). Du brauchst nur einen Texte
 
 ## 4. Formulare & Newsletter einrichten
 
-**Kontakt- und B2B-Formular (Resend)**
+**E-Mails: Kontakt- und B2B-Formular, Bestellbestätigungen (Resend)**
 
-1. Konto bei <https://resend.com> anlegen, eigene Domain verifizieren.
+1. Konto bei <https://resend.com> anlegen und die Domain `happyfoam.org` verifizieren. Die DNS-Einträge, die Resend anzeigt, im Cloudflare-Dashboard unter _DNS_ anlegen (die IONOS-Mail-Einträge MX/TXT bleiben unverändert).
 2. API-Key erstellen und in `.env.local` eintragen:
    ```
    RESEND_API_KEY=re_...
    CONTACT_EMAIL=hallo@happyfoam.org
-   MAIL_FROM=HappyFoam <hallo@happyfoam.org>
+   MAIL_FROM=HappyFoam <bestellung@happyfoam.org>
    ```
+   Auf Cloudflare: `npx wrangler secret put RESEND_API_KEY` (ebenso `CONTACT_EMAIL`, `MAIL_FROM`).
 
 Beide Formulare haben einen Spamschutz (verstecktes „Honeypot“-Feld) und eine Datenschutz-Checkbox.
 
@@ -183,7 +200,7 @@ Im Worker → **Settings → Builds** das GitHub-Repository verbinden:
 - Build-Befehl: `npx opennextjs-cloudflare build`
 - Deploy-Befehl: `npx opennextjs-cloudflare deploy`
 
-**Geheime Schlüssel (Resend, Brevo, Shopify …)**
+**Geheime Schlüssel (Stripe, Resend, Brevo …)**
 Im Worker → **Settings → Variables and Secrets** eintragen, oder per `npx wrangler secret put RESEND_API_KEY`. Für den lokalen Test kommen sie in die Datei `.dev.vars` (gleiche Namen wie in `.env.example`).
 
 **Kosten**
@@ -195,19 +212,19 @@ Der kostenlose Workers-Tarif erlaubt 100.000 Aufrufe pro Tag und 10 ms Rechenzei
 
 ## 6. Rechtstexte einfügen
 
-Die Rechtstexte werden **nicht** selbst geschrieben, sondern von einem Rechtstexte-Dienst bezogen (z. B. IT-Recht Kanzlei, Händlerbund). Die Seiten sind angelegt und enthalten einen markierten Kasten, an dessen Stelle der Text kommt:
+Die Rechtstexte werden **nicht** selbst geschrieben, sondern von einem Rechtstexte-Dienst bezogen (z. B. IT-Recht Kanzlei, Händlerbund). Sie liegen als einfache Textdateien (Markdown) in `content/de/rechtliches/` und erscheinen **auf der Website und in der Bestellbestätigungs-E-Mail** – du pflegst sie also nur an einer Stelle.
 
-| Seite                                         | Datei                                  | Platzhalter         |
-| --------------------------------------------- | -------------------------------------- | ------------------- |
-| Impressum (§ 5 DDG)                           | `src/app/impressum/page.tsx`           | `[IMPRESSUM]`       |
-| Datenschutzerklärung                          | `src/app/datenschutz/page.tsx`         | `[DATENSCHUTZ]`     |
-| AGB                                           | `src/app/agb/page.tsx`                 | `[AGB]`             |
-| Widerrufsbelehrung + Muster-Widerrufsformular | `src/app/widerruf/page.tsx`            | `[WIDERRUF]`        |
-| Versand & Zahlung                             | `src/app/versand-und-zahlung/page.tsx` | `[VERSAND_ZAHLUNG]` |
+| Datei                                   | Erscheint auf                                                     | Platzhalter         |
+| --------------------------------------- | ----------------------------------------------------------------- | ------------------- |
+| `content/de/rechtliches/impressum.md`   | /impressum (§ 5 DDG)                                              | `[IMPRESSUM]`       |
+| `content/de/rechtliches/datenschutz.md` | /datenschutz                                                      | `[DATENSCHUTZ]`     |
+| `content/de/rechtliches/agb.md`         | /agb **und** Bestell-E-Mail                                       | `[AGB]`             |
+| `content/de/rechtliches/widerruf.md`    | /widerruf **und** Bestell-E-Mail (inkl. Muster-Widerrufsformular) | `[WIDERRUF]`        |
+| `content/de/rechtliches/versand.md`     | /versand-und-zahlung (Zusatztext)                                 | `[VERSAND_ZAHLUNG]` |
 
-Das gesetzliche Muster-Widerrufsformular ist bereits enthalten – bitte mit der Fassung des Anbieters abgleichen.
+So geht's: Den Platzhalter in der Datei durch den Text des Anbieters ersetzen (Überschriften mit `##`, Aufzählungen mit `-`, HTML vom Anbieter funktioniert auch). Beim Veröffentlichen wird alles automatisch übernommen. Das gesetzliche Muster-Widerrufsformular ist bereits enthalten – bitte mit der Fassung des Anbieters abgleichen.
 
-**Für die Datenschutzerklärung wichtig:** Die Website wird über Cloudflare ausgeliefert (Hosting/CDN). Das muss der Rechtstexte-Anbieter berücksichtigen.
+**Für die Datenschutzerklärung wichtig:** Die Website wird über Cloudflare ausgeliefert (Hosting/CDN). Auf der Kasse wird Stripe.js geladen (Zahlungsabwicklung durch Stripe, inkl. PayPal/Klarna). E-Mails gehen über Resend, der Newsletter über Brevo. Das muss der Rechtstexte-Anbieter berücksichtigen.
 
 **Bereits technisch berücksichtigt:** Schriften werden lokal ausgeliefert (kein Google-Fonts-Server), keine externen Einbettungen, keine Cookies im Standardbetrieb (der Warenkorb liegt im Browser-Speicher), Cookie-Banner vorbereitet und per Schalter aktivierbar, Newsletter nur mit Double-Opt-in, Datenschutz-Hinweis an allen Formularen, Preisangaben mit MwSt.-/Kleinunternehmer-Hinweis, Grundpreis, Versandkosten-Link und GPSR-Angaben (Hersteller, Sicherheitshinweise, Typbezeichnung, Charge) auf jeder Produktseite.
 
@@ -215,30 +232,30 @@ Das gesetzliche Muster-Widerrufsformular ist bereits enthalten – bitte mit der
 
 ## 7. Offene Platzhalter
 
-| Platzhalter                                                                | Bedeutung                                   | Fundstelle                                                                                       |
-| -------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `[PREIS_POCKET]`                                                           | Endpreis Pocket-Box (Plan: 6,99 €)          | `data/products.json`                                                                             |
-| `[PREIS_VORRAT]`                                                           | Endpreis Vorratspack (Plan: 17,99 €)        | `data/products.json`                                                                             |
-| `[PREIS_B2B]`                                                              | Preis Business-Karton (Plan: 60 € netto)    | `data/products.json`, `content/de/business.json`                                                 |
-| `[PREIS_STAFFEL_1]` … `[PREIS_STAFFEL_3]`                                  | Mengenstaffel B2B                           | `content/de/business.json`                                                                       |
-| `[MESSWERT_OHNE_DB]`, `[MESSWERT_MIT_DB]`                                  | Gemessene Lautstärke ohne/mit Schaum        | `content/de/home.json`, `content/de/how.json`                                                    |
-| `[SCHAUMDAUER_MIN]`                                                        | Wie lange der Schaum hält                   | `content/de/faq.json`, `content/de/how.json`                                                     |
-| `[INHALTSSTOFFE_FINAL]`                                                    | Finale Inhaltsstoffliste                    | `content/de/home.json`, `content/de/faq.json`, Produktseite (`src/app/produkte/[slug]/page.tsx`) |
-| `[ROHR_KLAERGRUBE_TEXT]`, `[URINAL_TEXT]`, `[DUFT_TEXT]`                   | FAQ-Antworten nach Labortests               | `content/de/faq.json`                                                                            |
-| `[HERSTELLER_ANGABEN]`                                                     | Name, Postanschrift, E-Mail (GPSR)          | `site.config.ts` (`legal.manufacturer`), Muster-Widerrufsformular                                |
-| `[SICHERHEITSHINWEISE]`                                                    | Warn- und Sicherheitshinweise               | `site.config.ts` (`legal.safetyNotes`)                                                           |
-| `[TYPBEZEICHNUNG]`, `[CHARGE]`                                             | Typ-/Chargenbezeichnung je Produkt          | `data/products.json`                                                                             |
-| `[FUELLMENGE_G]` / Grundpreis                                              | Füllmenge in Gramm → `netWeightGrams`       | `data/products.json`                                                                             |
-| `[LIEFERZEIT]`                                                             | Lieferzeit in Werktagen                     | `site.config.ts` (`legal.deliveryTime`)                                                          |
-| `[VERSANDKOSTEN_DE]`, `[VERSANDKOSTENFREI_AB]`                             | Versandkosten                               | `src/app/versand-und-zahlung/page.tsx`                                                           |
-| `[KOSTEN_PRO_NUTZUNG]`                                                     | B2B-Kosten pro Toilettengang                | `content/de/business.json`                                                                       |
-| `[KONTAKT_EMAIL]`                                                          | Öffentliche Kontaktadresse                  | `site.config.ts` + `CONTACT_EMAIL` in `.env.local`                                               |
-| `[SOCIAL_LINKS]`                                                           | Instagram, TikTok, LinkedIn …               | `site.config.ts` (`social`)                                                                      |
-| `[GRUENDERSTORY]`                                                          | Text „Über uns“                             | `content/de/about.json`                                                                          |
-| `[GRUENDERFOTO]`                                                           | Foto für „Über uns“                         | `src/app/ueber-uns/page.tsx`                                                                     |
-| `[PRESSEKONTAKT_NAME]`, `[PRESSEKIT_DOWNLOAD]`                             | Pressekontakt, Link zum Pressekit           | `src/app/presse/page.tsx`                                                                        |
-| `[IMPRESSUM]`, `[DATENSCHUTZ]`, `[AGB]`, `[WIDERRUF]`, `[VERSAND_ZAHLUNG]` | Rechtstexte vom Anbieter                    | siehe Abschnitt 6                                                                                |
-| `[COOKIE_TEXT]`                                                            | Text im Cookie-Banner (nur falls aktiviert) | `src/components/layout/CookieBanner.tsx`                                                         |
+| Platzhalter                                                                | Bedeutung                                                              | Fundstelle                                                                                       |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `[PREIS_POCKET]`                                                           | Endpreis Pocket-Box (Plan: 6,99 €)                                     | `data/products.json`                                                                             |
+| `[PREIS_VORRAT]`                                                           | Endpreis Vorratspack (Plan: 17,99 €)                                   | `data/products.json`                                                                             |
+| `[PREIS_B2B]`                                                              | Preis Business-Karton (Plan: 60 € netto)                               | `data/products.json`, `content/de/business.json`                                                 |
+| `[PREIS_STAFFEL_1]` … `[PREIS_STAFFEL_3]`                                  | Mengenstaffel B2B                                                      | `content/de/business.json`                                                                       |
+| `[MESSWERT_OHNE_DB]`, `[MESSWERT_MIT_DB]`                                  | Gemessene Lautstärke ohne/mit Schaum                                   | `content/de/home.json`, `content/de/how.json`                                                    |
+| `[SCHAUMDAUER_MIN]`                                                        | Wie lange der Schaum hält                                              | `content/de/faq.json`, `content/de/how.json`                                                     |
+| `[INHALTSSTOFFE_FINAL]`                                                    | Finale Inhaltsstoffliste                                               | `content/de/home.json`, `content/de/faq.json`, Produktseite (`src/app/produkte/[slug]/page.tsx`) |
+| `[ROHR_KLAERGRUBE_TEXT]`, `[URINAL_TEXT]`, `[DUFT_TEXT]`                   | FAQ-Antworten nach Labortests                                          | `content/de/faq.json`                                                                            |
+| `[HERSTELLER_ANGABEN]`                                                     | Name, Postanschrift, E-Mail (GPSR)                                     | `site.config.ts` (`legal.manufacturer`), Muster-Widerrufsformular                                |
+| `[SICHERHEITSHINWEISE]`                                                    | Warn- und Sicherheitshinweise                                          | `site.config.ts` (`legal.safetyNotes`)                                                           |
+| `[TYPBEZEICHNUNG]`, `[CHARGE]`                                             | Typ-/Chargenbezeichnung je Produkt                                     | `data/products.json`                                                                             |
+| `[FUELLMENGE_G]` / Grundpreis                                              | Füllmenge in Gramm → `netWeightGrams`                                  | `data/products.json`                                                                             |
+| `[LIEFERZEIT]`                                                             | Lieferzeit in Werktagen                                                | `site.config.ts` (`legal.deliveryTime`)                                                          |
+| `[VERSANDKOSTEN_DE]`, `[VERSANDKOSTENFREI_AB]`                             | Versandkosten (eingetragen: 3,95 € / frei ab 30 € – Platzhalterwerte!) | `site.config.ts` (`shop.shipping`)                                                               |
+| `[KOSTEN_PRO_NUTZUNG]`                                                     | B2B-Kosten pro Toilettengang                                           | `content/de/business.json`                                                                       |
+| `[KONTAKT_EMAIL]`                                                          | Öffentliche Kontaktadresse                                             | `site.config.ts` + `CONTACT_EMAIL` in `.env.local`                                               |
+| `[SOCIAL_LINKS]`                                                           | Instagram, TikTok, LinkedIn …                                          | `site.config.ts` (`social`)                                                                      |
+| `[GRUENDERSTORY]`                                                          | Text „Über uns“                                                        | `content/de/about.json`                                                                          |
+| `[GRUENDERFOTO]`                                                           | Foto für „Über uns“                                                    | `src/app/ueber-uns/page.tsx`                                                                     |
+| `[PRESSEKONTAKT_NAME]`, `[PRESSEKIT_DOWNLOAD]`                             | Pressekontakt, Link zum Pressekit                                      | `src/app/presse/page.tsx`                                                                        |
+| `[IMPRESSUM]`, `[DATENSCHUTZ]`, `[AGB]`, `[WIDERRUF]`, `[VERSAND_ZAHLUNG]` | Rechtstexte vom Anbieter                                               | `content/de/rechtliches/*.md` (siehe Abschnitt 6)                                                |
+| `[COOKIE_TEXT]`                                                            | Text im Cookie-Banner (nur falls aktiviert)                            | `src/components/layout/CookieBanner.tsx`                                                         |
 
 Schnell alle offenen Platzhalter finden:
 
@@ -252,15 +269,15 @@ grep -rnoE "\[[A-ZÄÖÜ0-9_]{3,}\]" content data site.config.ts src
 
 ## 8. Fehlende Dateien & Assets
 
-| Was                                               | Status                                                            | Wo ersetzen                                                                                                                |
-| ------------------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Logo / Wortmarke                                  | **Entwurf** in Bricolage Grotesque, „o“ als lächelnde Schaumblase | `public/brand/happyfoam-logo-entwurf.svg` (wird mit `npm run build:logo` erzeugt), im Code `src/components/brand/Logo.tsx` |
-| Maskottchen (lächelnde Schaumblase)               | Entwurf, frei erfunden                                            | `src/components/brand/Mascot.tsx`, `public/brand/happyfoam-maskottchen.svg`                                                |
-| Produktfotos/Renderings Box & Sachet              | gezeichnete Platzhalter                                           | echte Bilder einfach in Shopify hochladen – sie ersetzen die Platzhalter automatisch                                       |
-| Hörproben „Ohne“ / „Mit HappyFoam“                | synthetische Platzhalter                                          | `public/audio/ohne.mp3`, `public/audio/mit.mp3` (gleiche Dateinamen, 2–4 Sekunden)                                         |
-| Echte Messwerte, Inhaltsstoffe, Herstellerangaben | fehlen                                                            | siehe Platzhalter-Tabelle                                                                                                  |
-| Gründerfoto & -story                              | fehlen                                                            | `src/app/ueber-uns/page.tsx`, `content/de/about.json`                                                                      |
-| Social-Media-Bilder (Open Graph)                  | werden automatisch im Marken-Look erzeugt                         | `src/lib/og.tsx`                                                                                                           |
+| Was                                               | Status                                                            | Wo ersetzen                                                                                                                         |
+| ------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Logo / Wortmarke                                  | **Entwurf** in Bricolage Grotesque, „o“ als lächelnde Schaumblase | `public/brand/happyfoam-logo-entwurf.svg` (wird mit `npm run build:logo` erzeugt), im Code `src/components/brand/Logo.tsx`          |
+| Maskottchen (lächelnde Schaumblase)               | Entwurf, frei erfunden                                            | `src/components/brand/Mascot.tsx`, `public/brand/happyfoam-maskottchen.svg`                                                         |
+| Produktfotos/Renderings Box & Sachet              | gezeichnete Platzhalter                                           | Fotos nach `public/produkte/` legen und in `data/products.json` unter `images` eintragen – sie ersetzen die Platzhalter automatisch |
+| Hörproben „Ohne“ / „Mit HappyFoam“                | synthetische Platzhalter                                          | `public/audio/ohne.mp3`, `public/audio/mit.mp3` (gleiche Dateinamen, 2–4 Sekunden)                                                  |
+| Echte Messwerte, Inhaltsstoffe, Herstellerangaben | fehlen                                                            | siehe Platzhalter-Tabelle                                                                                                           |
+| Gründerfoto & -story                              | fehlen                                                            | `src/app/ueber-uns/page.tsx`, `content/de/about.json`                                                                               |
+| Social-Media-Bilder (Open Graph)                  | werden automatisch im Marken-Look erzeugt                         | `src/lib/og.tsx`                                                                                                                    |
 
 ---
 
@@ -307,11 +324,15 @@ data/products.json        Produkte (Mock + Pflichtangaben)
 public/audio/             Hörproben (Platzhalter)
 public/brand/             Logo & Maskottchen (Entwürfe)
 src/app/                  Seiten (jede Unterseite = ein Ordner mit page.tsx)
-src/app/actions/          Server-Aktionen: Formulare, Checkout
+src/app/actions/          Server-Aktionen: Formulare, Kasse
 src/components/animations Hero, Blasen, Dezibel-Meter, Sound-Demo, Laufband, Strudel …
 src/components/shop/      Warenkorb, Produktkarten, Galerie, Preisangaben
 src/components/forms/     Kontakt-, B2B- und Newsletter-Formular
-src/lib/                  Shopify, Produkte, Preise, E-Mail, Newsletter, SEO
+src/lib/                  Produkte, Preise, Stripe, Bestellungen, E-Mail, Newsletter, SEO
+src/lib/emails/           Vorlagen für Bestellbestätigung und Benachrichtigung
+src/components/checkout/  Kasse, Zahlungsbereich, Bestellübersicht, Bestätigungsseite
+src/app/api/stripe/       Stripe-Webhook
+content/de/rechtliches/   Rechtstexte als Markdown (Seiten + E-Mails)
 tests/                    Playwright-Smoke-Tests
 scripts/                  Screenshot- und Logo-Skripte
 ```
