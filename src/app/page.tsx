@@ -88,7 +88,99 @@ export default async function HomePage() {
 
       <Marquee items={home.claims} tone="ink" />
 
-      {/* 2 · Kennst du das? */}
+      {/* 2 · Produkt + Drei Schritte zur Stille */}
+      <section className="section-y relative overflow-hidden" aria-labelledby="schritte-titel">
+        <div className="container-hf grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+          <Reveal className="relative">
+            <div className="relative animate-float overflow-hidden rounded-[2.5rem] bg-[#eef2f6] shadow-[0_40px_80px_-50px_rgba(15,27,45,0.45)] ring-1 ring-ink/5 [animation-duration:7s]">
+              {/* Vorab optimierte WebP-Bilder (480/800 px) – keine Bildumwandlung zur Laufzeit nötig */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/produkte/sachet-packshot-800.webp"
+                srcSet="/produkte/sachet-packshot-480.webp 480w, /produkte/sachet-packshot-800.webp 800w"
+                sizes="(min-width: 1024px) 560px, 92vw"
+                width={800}
+                height={768}
+                alt="Ein HappyFoam-Sachet in Minzgrün mit lächelndem Logo und Schaumbläschen"
+                loading="lazy"
+                decoding="async"
+                className="h-auto w-full"
+              />
+            </div>
+            <span
+              className="bubble-deco absolute -top-5 -right-3 h-16 w-16 animate-float [animation-delay:1s]"
+              aria-hidden="true"
+            />
+            <span
+              className="bubble-deco absolute bottom-10 -left-4 h-10 w-10 animate-float [animation-delay:2s]"
+              aria-hidden="true"
+            />
+            <Sticker
+              tone="blush"
+              rotate={-6}
+              className="absolute top-5 left-5 px-4 py-1.5 text-base"
+            >
+              Psst!
+            </Sticker>
+            <Sticker
+              tone="sun"
+              rotate={4}
+              className="absolute right-5 bottom-5 px-4 py-1.5 text-base"
+            >
+              Schaum drüber.
+            </Sticker>
+          </Reveal>
+
+          <div>
+            <Reveal>
+              <p className="eyebrow mb-3">{home.steps.eyebrow}</p>
+              <h2
+                id="schritte-titel"
+                className="font-display text-[clamp(2rem,5vw,3.25rem)] leading-[1.05] font-extrabold"
+              >
+                {home.steps.title}
+              </h2>
+            </Reveal>
+            <ol className="mt-8 flex flex-col gap-4">
+              {home.steps.items.map((step, i) => {
+                const Art = stepArt[i];
+                return (
+                  <Reveal
+                    as="li"
+                    key={step.title}
+                    delay={i * 0.12}
+                    className="flex items-center gap-4 rounded-[2rem] bg-bubble p-3 pr-5 ring-1 ring-ink/5 md:gap-5"
+                  >
+                    <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-foam md:h-28 md:w-28">
+                      <div className="scale-[0.6] md:scale-[0.7]">
+                        <Art />
+                      </div>
+                      <span className="absolute top-2 left-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-ink font-display text-sm font-extrabold text-bubble">
+                        {i + 1}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="font-display text-xl leading-tight font-extrabold md:text-2xl">
+                        {step.title}
+                      </h3>
+                      <p className="mt-1 text-muted md:text-lg">{step.text}</p>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </ol>
+            <Reveal>
+              <p className="mt-6 font-display text-xl font-bold md:text-2xl">
+                <span className="inline-block rounded-3xl bg-sun px-5 py-2">
+                  {home.steps.outro}
+                </span>
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* 3 · Kennst du das? */}
       <section className="section-y">
         <div className="container-hf">
           <Reveal>
@@ -118,7 +210,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 3 · Zahlen */}
+      {/* 4 · Zahlen */}
       <section className="pb-20 md:pb-28">
         <div className="container-hf">
           <Reveal>
@@ -165,40 +257,6 @@ export default async function HomePage() {
               </li>
             ))}
           </ol>
-        </div>
-      </section>
-
-      {/* 4 · So funktioniert's */}
-      <section className="section-y relative overflow-hidden bg-bubble">
-        <div className="container-hf">
-          <Reveal>
-            <SectionHeading eyebrow={home.steps.eyebrow} title={home.steps.title} align="center" />
-          </Reveal>
-          <ol className="mt-14 grid gap-8 md:grid-cols-3">
-            {home.steps.items.map((step, i) => {
-              const Art = stepArt[i];
-              return (
-                <Reveal
-                  as="li"
-                  key={step.title}
-                  delay={i * 0.15}
-                  className="relative flex flex-col items-center rounded-[2rem] bg-foam px-6 pt-6 pb-8 text-center"
-                >
-                  <span className="absolute top-5 left-5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-ink font-display text-lg font-extrabold text-bubble">
-                    {i + 1}
-                  </span>
-                  <Art />
-                  <h3 className="mt-4 font-display text-2xl font-extrabold">{step.title}</h3>
-                  <p className="mt-1 text-lg text-muted">{step.text}</p>
-                </Reveal>
-              );
-            })}
-          </ol>
-          <Reveal>
-            <p className="mt-10 text-center font-display text-2xl font-bold">
-              <span className="inline-block rounded-3xl bg-sun px-5 py-2">{home.steps.outro}</span>
-            </p>
-          </Reveal>
         </div>
       </section>
 
