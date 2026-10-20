@@ -41,8 +41,12 @@ test.describe("Kasse", () => {
   });
 
   test("Bestellung im Demo-Modus (ohne Stripe-Schlüssel)", async ({ page }) => {
-    test.skip(Boolean(process.env.STRIPE_TEST_PAYMENT), "Stripe ist verbunden");
     await addToCartAndOpenCheckout(page);
+    // Erkennen, ob die Kasse mit Stripe verbunden ist (dann ist dieser Test nicht relevant)
+    const demoBox = page.getByText("Demo-Modus: Stripe ist noch nicht verbunden");
+    const stripeFrame = page.locator('iframe[title*="Zahlung"]');
+    await expect(demoBox.or(stripeFrame)).toBeVisible({ timeout: 20_000 });
+    test.skip(await stripeFrame.isVisible(), "Stripe ist verbunden – Demo-Modus nicht aktiv");
     await fillAddress(page);
     await page.getByRole("button", { name: "Zahlungspflichtig bestellen" }).click();
     await expect(page.getByRole("status").filter({ hasText: "Demo-Modus" })).toBeVisible();
