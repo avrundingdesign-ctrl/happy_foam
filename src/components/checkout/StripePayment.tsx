@@ -94,7 +94,7 @@ export function StripePayment({ apiRef }: { apiRef: MutableRefObject<PaymentApi 
         // Name, E-Mail und Adresse kennen wir schon aus dem Formular darüber
         fields: { billingDetails: { name: "never", email: "never", address: "never" } },
         business: { name: "HappyFoam" },
-        wallets: { applePay: "auto", googlePay: "auto" },
+        wallets: { applePay: "auto", googlePay: "auto", link: "never" },
       }}
     />
   );

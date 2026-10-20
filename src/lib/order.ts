@@ -43,7 +43,15 @@ const ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
 /** Bestellnummer wie HF-261019-7KQ2 (Datum + 4 zufällige, gut lesbare Zeichen). */
 export function generateOrderNumber(date = new Date()) {
-  const ymd = date.toISOString().slice(2, 10).replace(/-/g, "");
+  // Datum in deutscher Zeit (nicht UTC), z. B. 261021
+  const parts = new Intl.DateTimeFormat("de-DE", {
+    timeZone: "Europe/Berlin",
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "00";
+  const ymd = `${get("year")}${get("month")}${get("day")}`;
   const bytes = crypto.getRandomValues(new Uint8Array(4));
   const rand = [...bytes].map((b) => ALPHABET[b % ALPHABET.length]).join("");
   return `${siteConfig.shop.orderPrefix}-${ymd}-${rand}`;
