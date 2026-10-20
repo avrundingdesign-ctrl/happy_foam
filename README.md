@@ -82,7 +82,7 @@ Preise und Versandkosten berechnet **nur der Server** aus `data/products.json` u
    - URL: `https://happyfoam.org/api/stripe/webhook`
    - Ereignis: `payment_intent.succeeded`
    - Danach das **Signing Secret** (`whsec_…`) kopieren.
-6. **Schlüssel bei Cloudflare hinterlegen** (einmalig, im Projektordner):
+6. **Schlüssel bei Cloudflare hinterlegen** – entweder im Cloudflare-Dashboard (_Workers & Pages → happyfoam-website → Settings → Variables and Secrets_, Typ „Secret“) oder im Projektordner:
    ```bash
    npx wrangler secret put STRIPE_SECRET_KEY        # sk_…
    npx wrangler secret put STRIPE_PUBLISHABLE_KEY   # pk_…
@@ -90,6 +90,9 @@ Preise und Versandkosten berechnet **nur der Server** aus `data/products.json` u
    ```
    Die Kasse liest die Schlüssel zur Laufzeit – ein neues Veröffentlichen ist dafür nicht nötig.
 7. **Lokal testen:** dieselben drei Werte (Testschlüssel) in `.env.local` eintragen und `npm run dev` neu starten. Testkarte: `4242 4242 4242 4242`, beliebiges Ablaufdatum in der Zukunft, beliebige Prüfziffer. Im Testmodus zeigt die Kasse oben einen gelben Hinweis.
+   Damit lokal auch die Bestellbestätigung ausgelöst wird, die Stripe-Benachrichtigungen an den lokalen Server weiterleiten:
+   `npx @stripe/cli listen --api-key sk_test_… --forward-to localhost:3000/api/stripe/webhook` – das dort angezeigte `whsec_…` als `STRIPE_WEBHOOK_SECRET` in `.env.local` eintragen.
+   Automatischer Test inkl. Testzahlung: `STRIPE_TEST_PAYMENT=1 BASE_URL=http://localhost:3000 npx playwright test`.
 8. **Live gehen:** Konto bei Stripe vollständig verifizieren, die `…_live_…`-Schlüssel und einen Live-Webhook eintragen (Schritte 5 und 6 im Live-Modus wiederholen).
 
 **Bestellbestätigung per E-Mail:** braucht Resend (siehe Abschnitt 4) – sonst werden die E-Mails nur ins Log geschrieben. Zusätzlich kann Stripe eigene Zahlungsbelege schicken: _Einstellungen → Kunden-E-Mails → Erfolgreiche Zahlungen_.
