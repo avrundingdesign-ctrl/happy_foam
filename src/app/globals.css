@@ -225,3 +225,7 @@
   font-weight: 600;
   color: var(--color-ink);
 }
+.prose-hf > div > :first-child,
+.prose-hf > :first-child {
+  margin-top: 0;
+}

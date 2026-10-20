@@ -60,9 +60,14 @@ export default function PressPage() {
           <div className="rounded-[2rem] bg-sky/50 p-7 md:p-10">
             <h2 className="font-display text-2xl font-extrabold">Pressekontakt</h2>
             <p className="mt-3 text-lg">
-              <Rich text="[PRESSEKONTAKT_NAME]" />
+              {siteConfig.company.owner}
               <br />
-              <Rich text={siteConfig.contact.email} />
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="font-semibold underline underline-offset-4"
+              >
+                {siteConfig.contact.email}
+              </a>
             </p>
             <p className="mt-4 text-sm text-muted">
               Pressefotos und Produktmuster: <Rich text="[PRESSEKIT_DOWNLOAD]" />

@@ -13,9 +13,19 @@ export const siteConfig = {
   locale: "de-DE",
   city: "Hamburg",
 
+  /** Anbieter (Impressum, Hersteller-Angaben, E-Mails) – übernommen von trin.studio/impressum */
+  company: {
+    owner: "Christoph Hesse",
+    brand: "HappyFoam",
+    street: "Scheplerstraße 6",
+    zip: "22767",
+    city: "Hamburg",
+    country: "Deutschland",
+  },
+
   contact: {
-    /** Öffentliche Kontaktadresse – Platzhalter [KONTAKT_EMAIL] */
-    email: "[KONTAKT_EMAIL]",
+    /** Öffentliche Kontaktadresse */
+    email: "chris@trin.studio",
     /** Telefon optional – leer lassen, wenn nicht gewünscht */
     phone: "",
   },
@@ -31,8 +41,9 @@ export const siteConfig = {
     /** true = Kleinunternehmer-Hinweis statt „inkl. MwSt.“ */
     kleinunternehmer: false,
     vatRate: 0.19,
-    /** GPSR – Hersteller: Name, Postanschrift, E-Mail */
-    manufacturer: "[HERSTELLER_ANGABEN]",
+    /** GPSR – Hersteller: Name, Postanschrift, E-Mail (wer unter eigener Marke verkauft, gilt als Hersteller) */
+    manufacturer:
+      "Christoph Hesse · HappyFoam, Scheplerstraße 6, 22767 Hamburg, Deutschland · chris@trin.studio",
     safetyNotes: "[SICHERHEITSHINWEISE]",
     /** Lieferzeit-Text für Produktseiten */
     deliveryTime: "Lieferzeit: [LIEFERZEIT] Werktage",

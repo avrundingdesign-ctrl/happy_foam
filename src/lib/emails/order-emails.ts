@@ -39,6 +39,9 @@ function taxLine(order: OrderSummary) {
     : `Enthaltene MwSt. (${Math.round(siteConfig.legal.vatRate * 100)} %): ${money(order.vatCents)}`;
 }
 
+const { company } = siteConfig;
+const operatorLine = `${company.owner} · ${company.brand} · ${company.street} · ${company.zip} ${company.city} · ${siteConfig.contact.email}`;
+
 /** Bestellbestätigung für die Kundin / den Kunden (HTML + Text). */
 export function customerConfirmationEmail(order: OrderSummary) {
   const site = siteConfig.url;
@@ -85,6 +88,7 @@ export function customerConfirmationEmail(order: OrderSummary) {
     "WIDERRUFSBELEHRUNG",
     legalDocs.widerruf.text,
     "",
+    operatorLine,
     `Impressum: ${site}/impressum · Datenschutz: ${site}/datenschutz`,
   ].join("\n");
 
@@ -152,6 +156,7 @@ export function customerConfirmationEmail(order: OrderSummary) {
           ${legal("Allgemeine Geschäftsbedingungen", legalDocs.agb.html)}
           ${legal("Widerrufsbelehrung", legalDocs.widerruf.html)}
           <p style="margin:24px 0 0;font-size:12px;color:${C.muted};">
+            ${esc(operatorLine)}<br>
             <a href="${site}/impressum" style="color:${C.muted};">Impressum</a> ·
             <a href="${site}/datenschutz" style="color:${C.muted};">Datenschutz</a> ·
             Made with Schaum in Hamburg.

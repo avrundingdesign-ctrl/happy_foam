@@ -111,17 +111,17 @@ Preise und Versandkosten berechnet **nur der Server** aus `data/products.json` u
 
 Alle Inhalte liegen in einfachen Textdateien (JSON). Du brauchst nur einen Texteditor (z. B. [VS Code](https://code.visualstudio.com)). **Achtung:** Anführungszeichen `"` und Kommas `,` gehören zur Struktur – nur den Text dazwischen ändern.
 
-| Was                                                                                                                      | Datei                      |
-| ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| Zentrale Einstellungen (Name, Domain, E-Mail, Social-Links, Kleinunternehmer, Hersteller, Lieferzeit, Funktionen an/aus) | `site.config.ts`           |
-| Startseite (Hero, Szenen, Zahlen, Schritte, Claims im Laufband …)                                                        | `content/de/home.json`     |
-| FAQ (`"featured": true` = erscheint auf der Startseite)                                                                  | `content/de/faq.json`      |
-| Für Unternehmen (Vorteile, Mengenstaffel, Branchen im Formular)                                                          | `content/de/business.json` |
-| So funktioniert's                                                                                                        | `content/de/how.json`      |
-| Über uns                                                                                                                 | `content/de/about.json`    |
-| Produkte: Preise, Verfügbarkeit (`available`), Bilder (`images`), Pflichtangaben                                         | `data/products.json`       |
-| Versandkosten, Bestellnummern-Präfix                                                                                     | `site.config.ts` → `shop`  |
-| Rechtstexte (Seiten + Bestell-E-Mail)                                                                                    | `content/de/rechtliches/`  |
+| Was                                                                                                                                | Datei                      |
+| ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| Zentrale Einstellungen (Name, Anbieter/Adresse, E-Mail, Social-Links, Kleinunternehmer, Hersteller, Lieferzeit, Funktionen an/aus) | `site.config.ts`           |
+| Startseite (Hero, Szenen, Zahlen, Schritte, Claims im Laufband …)                                                                  | `content/de/home.json`     |
+| FAQ (`"featured": true` = erscheint auf der Startseite)                                                                            | `content/de/faq.json`      |
+| Für Unternehmen (Vorteile, Mengenstaffel, Branchen im Formular)                                                                    | `content/de/business.json` |
+| So funktioniert's                                                                                                                  | `content/de/how.json`      |
+| Über uns                                                                                                                           | `content/de/about.json`    |
+| Produkte: Preise, Verfügbarkeit (`available`), Bilder (`images`), Pflichtangaben                                                   | `data/products.json`       |
+| Versandkosten, Bestellnummern-Präfix                                                                                               | `site.config.ts` → `shop`  |
+| Rechtstexte (Seiten + Bestell-E-Mail)                                                                                              | `content/de/rechtliches/`  |
 
 **Platzhalter** wie `[SCHAUMDAUER_MIN]` werden auf der Website automatisch **gelb markiert**, damit nichts vergessen wird. Einfach durch den echten Text ersetzen – die Markierung verschwindet dann von selbst.
 
@@ -219,7 +219,7 @@ Die Rechtstexte werden **nicht** selbst geschrieben, sondern von einem Rechtstex
 
 | Datei                                   | Erscheint auf                                                     | Platzhalter         |
 | --------------------------------------- | ----------------------------------------------------------------- | ------------------- |
-| `content/de/rechtliches/impressum.md`   | /impressum (§ 5 DDG)                                              | `[IMPRESSUM]`       |
+| `content/de/rechtliches/impressum.md`   | /impressum (§ 5 DDG) – ausgefüllt mit den Daten von trin.studio   | –                   |
 | `content/de/rechtliches/datenschutz.md` | /datenschutz                                                      | `[DATENSCHUTZ]`     |
 | `content/de/rechtliches/agb.md`         | /agb **und** Bestell-E-Mail                                       | `[AGB]`             |
 | `content/de/rechtliches/widerruf.md`    | /widerruf **und** Bestell-E-Mail (inkl. Muster-Widerrufsformular) | `[WIDERRUF]`        |
@@ -235,30 +235,28 @@ So geht's: Den Platzhalter in der Datei durch den Text des Anbieters ersetzen (�
 
 ## 7. Offene Platzhalter
 
-| Platzhalter                                                                | Bedeutung                                                              | Fundstelle                                                                                       |
-| -------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `[PREIS_POCKET]`                                                           | Endpreis Pocket-Box (Plan: 6,99 €)                                     | `data/products.json`                                                                             |
-| `[PREIS_VORRAT]`                                                           | Endpreis Vorratspack (Plan: 17,99 €)                                   | `data/products.json`                                                                             |
-| `[PREIS_B2B]`                                                              | Preis Business-Karton (Plan: 60 € netto)                               | `data/products.json`, `content/de/business.json`                                                 |
-| `[PREIS_STAFFEL_1]` … `[PREIS_STAFFEL_3]`                                  | Mengenstaffel B2B                                                      | `content/de/business.json`                                                                       |
-| `[MESSWERT_OHNE_DB]`, `[MESSWERT_MIT_DB]`                                  | Gemessene Lautstärke ohne/mit Schaum                                   | `content/de/home.json`, `content/de/how.json`                                                    |
-| `[SCHAUMDAUER_MIN]`                                                        | Wie lange der Schaum hält                                              | `content/de/faq.json`, `content/de/how.json`                                                     |
-| `[INHALTSSTOFFE_FINAL]`                                                    | Finale Inhaltsstoffliste                                               | `content/de/home.json`, `content/de/faq.json`, Produktseite (`src/app/produkte/[slug]/page.tsx`) |
-| `[ROHR_KLAERGRUBE_TEXT]`, `[URINAL_TEXT]`, `[DUFT_TEXT]`                   | FAQ-Antworten nach Labortests                                          | `content/de/faq.json`                                                                            |
-| `[HERSTELLER_ANGABEN]`                                                     | Name, Postanschrift, E-Mail (GPSR)                                     | `site.config.ts` (`legal.manufacturer`), Muster-Widerrufsformular                                |
-| `[SICHERHEITSHINWEISE]`                                                    | Warn- und Sicherheitshinweise                                          | `site.config.ts` (`legal.safetyNotes`)                                                           |
-| `[TYPBEZEICHNUNG]`, `[CHARGE]`                                             | Typ-/Chargenbezeichnung je Produkt                                     | `data/products.json`                                                                             |
-| `[FUELLMENGE_G]` / Grundpreis                                              | Füllmenge in Gramm → `netWeightGrams`                                  | `data/products.json`                                                                             |
-| `[LIEFERZEIT]`                                                             | Lieferzeit in Werktagen                                                | `site.config.ts` (`legal.deliveryTime`)                                                          |
-| `[VERSANDKOSTEN_DE]`, `[VERSANDKOSTENFREI_AB]`                             | Versandkosten (eingetragen: 3,95 € / frei ab 30 € – Platzhalterwerte!) | `site.config.ts` (`shop.shipping`)                                                               |
-| `[KOSTEN_PRO_NUTZUNG]`                                                     | B2B-Kosten pro Toilettengang                                           | `content/de/business.json`                                                                       |
-| `[KONTAKT_EMAIL]`                                                          | Öffentliche Kontaktadresse                                             | `site.config.ts` + `CONTACT_EMAIL` in `.env.local`                                               |
-| `[SOCIAL_LINKS]`                                                           | Instagram, TikTok, LinkedIn …                                          | `site.config.ts` (`social`)                                                                      |
-| `[GRUENDERSTORY]`                                                          | Text „Über uns“                                                        | `content/de/about.json`                                                                          |
-| `[GRUENDERFOTO]`                                                           | Foto für „Über uns“                                                    | `src/app/ueber-uns/page.tsx`                                                                     |
-| `[PRESSEKONTAKT_NAME]`, `[PRESSEKIT_DOWNLOAD]`                             | Pressekontakt, Link zum Pressekit                                      | `src/app/presse/page.tsx`                                                                        |
-| `[IMPRESSUM]`, `[DATENSCHUTZ]`, `[AGB]`, `[WIDERRUF]`, `[VERSAND_ZAHLUNG]` | Rechtstexte vom Anbieter                                               | `content/de/rechtliches/*.md` (siehe Abschnitt 6)                                                |
-| `[COOKIE_TEXT]`                                                            | Text im Cookie-Banner (nur falls aktiviert)                            | `src/components/layout/CookieBanner.tsx`                                                         |
+| Platzhalter                                                 | Bedeutung                                                              | Fundstelle                                                                                       |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `[PREIS_POCKET]`                                            | Endpreis Pocket-Box (Plan: 6,99 €)                                     | `data/products.json`                                                                             |
+| `[PREIS_VORRAT]`                                            | Endpreis Vorratspack (Plan: 17,99 €)                                   | `data/products.json`                                                                             |
+| `[PREIS_B2B]`                                               | Preis Business-Karton (Plan: 60 € netto)                               | `data/products.json`, `content/de/business.json`                                                 |
+| `[PREIS_STAFFEL_1]` … `[PREIS_STAFFEL_3]`                   | Mengenstaffel B2B                                                      | `content/de/business.json`                                                                       |
+| `[MESSWERT_OHNE_DB]`, `[MESSWERT_MIT_DB]`                   | Gemessene Lautstärke ohne/mit Schaum                                   | `content/de/home.json`, `content/de/how.json`                                                    |
+| `[SCHAUMDAUER_MIN]`                                         | Wie lange der Schaum hält                                              | `content/de/faq.json`, `content/de/how.json`                                                     |
+| `[INHALTSSTOFFE_FINAL]`                                     | Finale Inhaltsstoffliste                                               | `content/de/home.json`, `content/de/faq.json`, Produktseite (`src/app/produkte/[slug]/page.tsx`) |
+| `[ROHR_KLAERGRUBE_TEXT]`, `[URINAL_TEXT]`, `[DUFT_TEXT]`    | FAQ-Antworten nach Labortests                                          | `content/de/faq.json`                                                                            |
+| `[SICHERHEITSHINWEISE]`                                     | Warn- und Sicherheitshinweise                                          | `site.config.ts` (`legal.safetyNotes`)                                                           |
+| `[TYPBEZEICHNUNG]`, `[CHARGE]`                              | Typ-/Chargenbezeichnung je Produkt                                     | `data/products.json`                                                                             |
+| `[FUELLMENGE_G]` / Grundpreis                               | Füllmenge in Gramm → `netWeightGrams`                                  | `data/products.json`                                                                             |
+| `[LIEFERZEIT]`                                              | Lieferzeit in Werktagen                                                | `site.config.ts` (`legal.deliveryTime`)                                                          |
+| `[VERSANDKOSTEN_DE]`, `[VERSANDKOSTENFREI_AB]`              | Versandkosten (eingetragen: 3,95 € / frei ab 30 € – Platzhalterwerte!) | `site.config.ts` (`shop.shipping`)                                                               |
+| `[KOSTEN_PRO_NUTZUNG]`                                      | B2B-Kosten pro Toilettengang                                           | `content/de/business.json`                                                                       |
+| `[SOCIAL_LINKS]`                                            | Instagram, TikTok, LinkedIn …                                          | `site.config.ts` (`social`)                                                                      |
+| `[GRUENDERSTORY]`                                           | Text „Über uns“                                                        | `content/de/about.json`                                                                          |
+| `[GRUENDERFOTO]`                                            | Foto für „Über uns“                                                    | `src/app/ueber-uns/page.tsx`                                                                     |
+| `[PRESSEKIT_DOWNLOAD]`                                      | Link zum Pressekit                                                     | `src/app/presse/page.tsx`                                                                        |
+| `[DATENSCHUTZ]`, `[AGB]`, `[WIDERRUF]`, `[VERSAND_ZAHLUNG]` | Rechtstexte vom Anbieter                                               | `content/de/rechtliches/*.md` (siehe Abschnitt 6)                                                |
+| `[COOKIE_TEXT]`                                             | Text im Cookie-Banner (nur falls aktiviert)                            | `src/components/layout/CookieBanner.tsx`                                                         |
 
 Schnell alle offenen Platzhalter finden:
 
