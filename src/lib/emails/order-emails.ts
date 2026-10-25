@@ -40,7 +40,7 @@ function taxLine(order: OrderSummary) {
 }
 
 const { company } = siteConfig;
-const operatorLine = `${company.owner} · ${company.brand} · ${company.street} · ${company.zip} ${company.city} · ${siteConfig.contact.email}`;
+const operatorLine = `${company.brand} ist ein Angebot von ${company.firm} · ${company.owner} · ${company.street} · ${company.zip} ${company.city} · ${siteConfig.contact.email}`;
 
 /** Bestellbestätigung für die Kundin / den Kunden (HTML + Text). */
 export function customerConfirmationEmail(order: OrderSummary) {

@@ -1,10 +1,12 @@
 ## Angaben gemäß § 5 DDG
 
 Christoph Hesse<br>
-HappyFoam<br>
+TRIN<br>
 Scheplerstraße 6<br>
 22767 Hamburg<br>
 Deutschland
+
+HappyFoam ist ein Angebot von TRIN.
 
 ## Kontakt
 

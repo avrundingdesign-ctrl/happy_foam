@@ -60,7 +60,7 @@ export default function PressPage() {
           <div className="rounded-[2rem] bg-sky/50 p-7 md:p-10">
             <h2 className="font-display text-2xl font-extrabold">Pressekontakt</h2>
             <p className="mt-3 text-lg">
-              {siteConfig.company.owner}
+              {siteConfig.company.owner} · {siteConfig.company.firm}
               <br />
               <a
                 href={`mailto:${siteConfig.contact.email}`}

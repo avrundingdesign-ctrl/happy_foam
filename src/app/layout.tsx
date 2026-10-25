@@ -56,6 +56,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             url: siteConfig.url,
             logo: `${siteConfig.url}/brand/happyfoam-logo-entwurf.svg`,
             slogan: siteConfig.claim,
+            parentOrganization: {
+              "@type": "Organization",
+              name: siteConfig.company.firm,
+              url: siteConfig.company.firmUrl,
+            },
             address: {
               "@type": "PostalAddress",
               addressLocality: siteConfig.city,

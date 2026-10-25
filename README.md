@@ -219,7 +219,7 @@ Die Rechtstexte werden **nicht** selbst geschrieben, sondern von einem Rechtstex
 
 | Datei                                   | Erscheint auf                                                     | Platzhalter         |
 | --------------------------------------- | ----------------------------------------------------------------- | ------------------- |
-| `content/de/rechtliches/impressum.md`   | /impressum (§ 5 DDG) – ausgefüllt mit den Daten von trin.studio   | –                   |
+| `content/de/rechtliches/impressum.md`   | /impressum (§ 5 DDG) – Anbieter TRIN (Christoph Hesse)            | –                   |
 | `content/de/rechtliches/datenschutz.md` | /datenschutz                                                      | `[DATENSCHUTZ]`     |
 | `content/de/rechtliches/agb.md`         | /agb **und** Bestell-E-Mail                                       | `[AGB]`             |
 | `content/de/rechtliches/widerruf.md`    | /widerruf **und** Bestell-E-Mail (inkl. Muster-Widerrufsformular) | `[WIDERRUF]`        |
